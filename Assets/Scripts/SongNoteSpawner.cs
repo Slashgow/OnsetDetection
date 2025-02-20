@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SongNoteSpawner : MonoBehaviour
@@ -10,6 +12,11 @@ public class SongNoteSpawner : MonoBehaviour
 
     [SerializeField]
     private AudioSource audioSource;
+
+    [SerializeField]
+    private List<TransFormByFrequencyDomain> transformByFrequencyDomains;
+
+    private int lastIndex = 0;
 
     private void Awake()
     {
@@ -26,6 +33,8 @@ public class SongNoteSpawner : MonoBehaviour
         audioSource.Play();
     }
 
+    private Transform GetTransformByDomain(FrequencyDomain domain) => transformByFrequencyDomains.First(transFormByFrequencyDomain => transFormByFrequencyDomain.Domain == domain).Transform;
+
     private void Update()
     {
         if (audioSource.isPlaying)
@@ -33,10 +42,30 @@ public class SongNoteSpawner : MonoBehaviour
 
             int indexToPlot = preProcessAudioData.GetIndexFromTime(audioSource.time) / 1024;
             //Debug.Log(indexToPlot);
-            if (preProcessAudioData.OnsetDetection.SpectralFluxInfoList[indexToPlot].isPeak)
+
+            if (lastIndex == indexToPlot)
+                return;
+
+            if (!preProcessAudioData.UseFrequencyDomainClassification)
             {
-                Instantiate(prefab);
+                if (preProcessAudioData.OnsetDetection.SpectralFluxInfoList[indexToPlot].isPeak)
+                {
+                    Instantiate(prefab);
+                }
             }
+            else
+            {
+                for (int i = 0; i < preProcessAudioData.OnsetDetectionFrequencyClassified.FrequencyDomainCount; i++)
+                {
+                    if (preProcessAudioData.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].spectralFluxInfoList[indexToPlot].isPeak)
+                    {
+                        Instantiate(prefab, GetTransformByDomain(preProcessAudioData.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].frequencyDomain));
+                    }
+                }
+            }
+
+            lastIndex = indexToPlot;
+            
         }
     }
 }

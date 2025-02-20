@@ -1,24 +1,14 @@
 using System;
 using System.Collections.Generic;
-
-public class SpectrumData
-{
-    public double[] spectrum;
-    public float time;
-    public SpectrumData(double[] spectrum, float time)
-    {
-        this.spectrum = spectrum;
-        this.time = time;
-    }
-}
-
+//using System.Diagnostics;
+using UnityEngine;
 public class OnsetDetection 
 {
-    private int windowSize;
-    private int windowMultiplier;
-    private float threshold;
+    protected int windowSize;
+    protected int windowMultiplier;
+    protected float threshold;
 
-    private List<SpectrumData> completeSpectrumData;
+    protected List<SpectrumData> completeSpectrumData;
 
     private List<SpectralFluxInfo> spectralFluxInfoList;
     public List<SpectralFluxInfo> SpectralFluxInfoList => spectralFluxInfoList;
@@ -34,11 +24,12 @@ public class OnsetDetection
 
         completeSpectrumData = new List<SpectrumData>();
         spectralFluxInfoList = new List<SpectralFluxInfo>();
+
     }
 
     public void PopulateCompleteSpectrumData(SpectrumData spectrumData) => completeSpectrumData.Add(spectrumData);
 
-    public void AnalyseAllSpectrum()
+    public virtual void AnalyseAllSpectrum()
     {
 
         for (int n=1 ; n<completeSpectrumData.Count; n++)
@@ -54,8 +45,9 @@ public class OnsetDetection
         SetPeaks(windowSize, windowMultiplier, threshold);
     }
 
-    private void CalculateOnsetDetectionFunction(double[] currentSpectrum, double[] previousSpectrum, float time)
+    protected virtual void CalculateOnsetDetectionFunction(double[] currentSpectrum, double[] previousSpectrum, float time)
     {
+        Debug.Log($"current Spectrum Size {currentSpectrum.Length}");
         double spectralFlux = 0;
         for (int k = 0; k < currentSpectrum.Length; k++)
         {
@@ -64,7 +56,7 @@ public class OnsetDetection
         spectralFluxInfoList.Add(new SpectralFluxInfo(spectralFlux, time));
     }
 
-    private void StandardizeOnsetDetectionFunction()
+    protected virtual void StandardizeOnsetDetectionFunction()
     {
         for (int k = 0; k < spectralFluxInfoList.Count; k++)
         {
@@ -73,7 +65,7 @@ public class OnsetDetection
         }
     }
 
-    private void SetPeaks(int windowSize, int windowMultiplier, float threshold)
+    protected virtual void SetPeaks(int windowSize, int windowMultiplier, float threshold)
     {
         for(int n = windowSize * windowMultiplier; n < spectralFluxInfoList.Count - windowSize; n++)
         {

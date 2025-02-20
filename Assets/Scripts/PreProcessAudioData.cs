@@ -17,8 +17,15 @@ public class PreProcessAudioData : MonoBehaviour
     [SerializeField, Range(0, 5)]
     private int windowMultiplier = 3;
 
-    [SerializeField, Range(0f, 0.0001f)]
+    [SerializeField, Range(0f, 0.001f)]
     private float threshold = 0.00001f;
+
+    [SerializeField]
+    private bool useFrequencyDomainClassification;
+    public bool UseFrequencyDomainClassification => useFrequencyDomainClassification;
+
+    [SerializeField]
+    private List<ThresholdByFrequencyDomain> thresholdByFrequencyDomainList;
 
     private float[] multiChannelSamples;
     private float[] averageMonoSamples;
@@ -28,6 +35,7 @@ public class PreProcessAudioData : MonoBehaviour
     private int sampleRate;
 
     public OnsetDetection OnsetDetection { get; private set; }
+    public OnsetDetectionFrequencyClassified OnsetDetectionFrequencyClassified { get; private set; }
 
     public event Action OnFinishAnalyseFullSpectrum;
     public bool IsAnalysedFinished { get; private set; }
@@ -54,10 +62,19 @@ public class PreProcessAudioData : MonoBehaviour
     {
         try
         {
-            OnsetDetection = new OnsetDetection(windowSize, windowMultiplier, threshold);
+            if(!useFrequencyDomainClassification)
+                OnsetDetection = new OnsetDetection(windowSize, windowMultiplier, threshold);
+            else 
+                OnsetDetectionFrequencyClassified = new OnsetDetectionFrequencyClassified(windowSize, windowMultiplier, thresholdByFrequencyDomainList, 1024, sampleRate);
+
             ConvertSamplesFromMonoToStereo();
             PerformFFTOnAverageMonoSamples();
-            OnsetDetection.AnalyseAllSpectrum();
+
+            if(!useFrequencyDomainClassification)
+                OnsetDetection.AnalyseAllSpectrum();
+            else 
+                OnsetDetectionFrequencyClassified.AnalyseAllSpectrum();
+
             Debug.Log("All spectrum analysed");
             IsAnalysedFinished = true;
         }
@@ -133,8 +150,10 @@ public class PreProcessAudioData : MonoBehaviour
             // These 1024 magnitude values correspond (roughly) to a single point in the audio timeline
             float currentSongTime = GetTimeFromIndex(i) * spectrumSampleSize;
 
-
-            OnsetDetection.PopulateCompleteSpectrumData(new SpectrumData(scaledFFTSpectrum, currentSongTime));
+            if (!useFrequencyDomainClassification)
+                OnsetDetection.PopulateCompleteSpectrumData(new SpectrumData(scaledFFTSpectrum, currentSongTime));
+            else
+                OnsetDetectionFrequencyClassified.PopulateCompleteSpectrumData(new SpectrumData(scaledFFTSpectrum, currentSongTime));
         }
 
         Debug.Log("Spectrum Analysis done");
