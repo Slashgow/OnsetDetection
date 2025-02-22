@@ -19,6 +19,8 @@ public class ScoreManager : MonoSingleton<ScoreManager>
     private int currentMultiplier = 1;
     private int numberOfSuccessiveNotes = 0;
 
+    private int lastMultiplier = 1;
+
     public event Action<int, NoteHitClassification> OnScoreUpdated;
     public event Action<int> OnMultiplierUpdated;
 
@@ -43,8 +45,12 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         if (noteHitClassification == NoteHitClassification.MISS)
         {
             currentMultiplier = 1;
-            OnMultiplierUpdated?.Invoke(currentMultiplier);
+
+            if(lastMultiplier != currentMultiplier)
+                OnMultiplierUpdated?.Invoke(currentMultiplier);
+
             numberOfSuccessiveNotes = 0;
+            lastMultiplier = currentMultiplier;
         }
         else
         {
@@ -54,12 +60,17 @@ public class ScoreManager : MonoSingleton<ScoreManager>
             {
                 currentMultiplier++;
                 currentMultiplier = Mathf.Clamp(currentMultiplier, 1, 4);
-                OnMultiplierUpdated?.Invoke(currentMultiplier);
+                
+                if(lastMultiplier != currentMultiplier)
+                    OnMultiplierUpdated?.Invoke(currentMultiplier);
+
+                lastMultiplier = currentMultiplier;
             }
 
             score += scorePerHitBase * currentMultiplier;
+            OnScoreUpdated?.Invoke(score, noteHitClassification);
         }
-        OnScoreUpdated?.Invoke(score, noteHitClassification);
+      
     }
 
 }
