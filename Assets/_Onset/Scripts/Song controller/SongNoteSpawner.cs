@@ -10,10 +10,13 @@ public class SongNoteSpawner : MonoBehaviour
     private SongSpawnData songSpawnData;
 
     [SerializeField]
-    private PreProcessAudioData preProcessAudioData;
+    private SongLoader songLoader;
 
     [SerializeField]
     private AudioSource audioSource;
+
+    [SerializeField, Range(0f,2f)]
+    private float timeBetweenNotesToChangeTrack;
 
     [SerializeField]
     private List<TransFormByFrequencyDomain> transformByFrequencyDomains;
@@ -23,22 +26,17 @@ public class SongNoteSpawner : MonoBehaviour
     public float timeElapsed = 0.0f;
     private int lastIndex = 0;
     private bool hasStarted = false;
+    private int currentTrackIndex = 0;
+    private int lastPeakIndex;
 
-    private void Awake()
-    {
-        preProcessAudioData.OnFinishAnalyseFullSpectrum += PreProcessAudioData_OnFinishAnalyseFullSpectrum;
-    }
+    private void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
 
-    private void OnDestroy()
+    private void OnDestroy() => songLoader.OnFinishLoadingSong -= SongLoader_OnFinishLoadingSong;
+    private void SongLoader_OnFinishLoadingSong()
     {
-        preProcessAudioData.OnFinishAnalyseFullSpectrum += PreProcessAudioData_OnFinishAnalyseFullSpectrum;
-    }
-    private void PreProcessAudioData_OnFinishAnalyseFullSpectrum()
-    {
-        audioSource.clip = preProcessAudioData.AudioClip;
-        //audioSource.Play();
+        audioSource.clip = songLoader.AudioClip;
         hasStarted = true;
-        Timer.Register(songSpawnData.TimeToHit, () => {
+        Timer.Register(songSpawnData.TimeToHit(songSpawnData.Tracks[0]), () => {
             Debug.Log("Start Playing audio");
             audioSource.Play();
         });
@@ -52,33 +50,44 @@ public class SongNoteSpawner : MonoBehaviour
         if (hasStarted)
         {
             
-            int indexToPlot = preProcessAudioData.GetIndexFromTime(timeElapsed) / 1024;
+            int indexToPlot = songLoader.GetIndexFromTime(timeElapsed) / 1024;
             timeElapsed += Time.deltaTime;
             //Debug.Log(indexToPlot);
 
-            if (lastIndex == indexToPlot)
+            if (lastIndex == indexToPlot || indexToPlot >= songLoader.OnsetDetection.SpectralFluxInfoList.Count)
                 return;
 
-            if (!preProcessAudioData.UseFrequencyDomainClassification)
+            if (!songLoader.UseFrequencyDomainClassification)
             {
-                if (preProcessAudioData.OnsetDetection.SpectralFluxInfoList[indexToPlot].isPeak)
+                if(songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].isPeak)
                 {
+                    ChooseTrack(indexToPlot);
                     SpawnNote();
+                    lastPeakIndex = indexToPlot;
                 }
             }
             else
             {
-                for (int i = 0; i < preProcessAudioData.OnsetDetectionFrequencyClassified.FrequencyDomainCount; i++)
-                {
-                    if (preProcessAudioData.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].spectralFluxInfoList[indexToPlot].isPeak)
-                    {
-                        //Instantiate(notePrefab, GetTransformByDomain(preProcessAudioData.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].frequencyDomain));
-                    }
-                }
+               //for (int i = 0; i < songLoader.OnsetDetectionFrequencyClassified.FrequencyDomainCount; i++)
+               //{
+               //    if (songLoader.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].spectralFluxInfoList[indexToPlot].isPeak)
+               //    {
+               //        //Instantiate(notePrefab, GetTransformByDomain(preProcessAudioData.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].frequencyDomain));
+               //    }
+               //}
             }
 
             lastIndex = indexToPlot;
             
+        }
+    }
+
+    private void ChooseTrack(int indexToPlot)
+    {
+        float timeBetweenNotes = songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - songLoader.OnsetDetection.SpectralFluxInfoList[lastPeakIndex].time;
+        if (timeBetweenNotes >= timeBetweenNotesToChangeTrack)
+        {
+            currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.Tracks.Count;
         }
     }
 
@@ -87,12 +96,13 @@ public class SongNoteSpawner : MonoBehaviour
         GameObject noteGameObjectInstance = songSpawnData.NotePool.GetPrefabFromPool();
 
         TrackFollower trackFollowerInstance = noteGameObjectInstance.GetComponent<TrackFollower>();
-        trackFollowerInstance.Setup(songSpawnData.Track.PathCreatorToHitNote, songSpawnData.Track.PathCreatorFromHitNoteToPlanet, songSpawnData.NoteSpeed);
+        float noteSpeed = currentTrackIndex == 0 ? songSpawnData.NoteSpeed : songSpawnData.GetSpeedToMatchFirstTrack(songSpawnData.Tracks[currentTrackIndex]); 
+        trackFollowerInstance.Setup(songSpawnData.Tracks[currentTrackIndex].PathCreatorToHitNote, songSpawnData.Tracks[currentTrackIndex].PathCreatorFromHitNoteToPlanet, noteSpeed);
         
         Note noteInstance = noteGameObjectInstance.GetComponent<Note>();
         noteInstance.OnMissNote -= NoteInstance_OnMissHitPoint;
         noteInstance.OnMissNote += NoteInstance_OnMissHitPoint;
-        noteInstance.Setup(songSpawnData.NotePool, songSpawnData.TimeToHit);
+        noteInstance.Setup(songSpawnData.NotePool, songSpawnData.TimeToHit(songSpawnData.Tracks[currentTrackIndex]));
 
     }
 

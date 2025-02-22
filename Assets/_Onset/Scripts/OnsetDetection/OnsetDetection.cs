@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 //using System.Diagnostics;
 using UnityEngine;
+
+[Serializable]
 public class OnsetDetection 
 {
     protected int windowSize;
@@ -10,6 +12,7 @@ public class OnsetDetection
 
     protected List<SpectrumData> completeSpectrumData;
 
+    [SerializeField]
     private List<SpectralFluxInfo> spectralFluxInfoList;
     public List<SpectralFluxInfo> SpectralFluxInfoList => spectralFluxInfoList;
 

@@ -54,6 +54,7 @@ public class PreProcessAudioData : MonoBehaviour
     {
         if (IsAnalysedFinished && !wasRaised)
         {
+            SaveSongDataToJson();
             OnFinishAnalyseFullSpectrum?.Invoke();
             wasRaised = true;
         }
@@ -171,6 +172,27 @@ public class PreProcessAudioData : MonoBehaviour
     public float GetTimeFromIndex(int index)
     {
         return ((1f / (float)this.sampleRate) * index);
+    }
+
+    public void SaveSongDataToJson()
+    {
+        if (!useFrequencyDomainClassification)
+        {
+            string songData = JsonUtility.ToJson(this.OnsetDetection);
+            string filePath = Application.persistentDataPath + $"{audioClip.name}_full.json";
+            Debug.Log(filePath);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            System.IO.File.WriteAllText(filePath, songData);
+            
+            
+            Debug.Log("Sauvegarde effectué");
+        }
+        
     }
 
 }

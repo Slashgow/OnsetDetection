@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class SongSpawnData
 {
     [SerializeField]
-    private Track track;
-    public Track Track => track;
+    private List<Track> tracks;
+    public List<Track> Tracks => tracks;
 
     [SerializeField, Range(0f, 10f)]
     private float noteSpeed;
@@ -15,5 +16,9 @@ public class SongSpawnData
     [SerializeField]
     private PoolingSystem notePool;
     public PoolingSystem NotePool => notePool;
-    public float TimeToHit => track.PathCreatorToHitNote.path.length / noteSpeed;
+
+    public float timeToHitFirstTrack => tracks[0].PathCreatorToHitNote.path.length / noteSpeed;
+    public float TimeToHit(Track track) => track.PathCreatorToHitNote.path.length / GetSpeedToMatchFirstTrack(track);
+
+    public float GetSpeedToMatchFirstTrack(Track track) => track.PathCreatorToHitNote.path.length / timeToHitFirstTrack;
 }
