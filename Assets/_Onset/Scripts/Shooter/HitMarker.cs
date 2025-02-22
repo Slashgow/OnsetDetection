@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class HitMarker : MonoBehaviour
 {
     [SerializeField]
-    private Image hitMarkerImlage;
+    private Image hitMarkerImage;
 
     [SerializeField]
     private Ease easing;
@@ -19,16 +19,51 @@ public class HitMarker : MonoBehaviour
     private float maxZRotation = 30f;
 
     [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
     private GunController gunController;
 
-    private void Awake() => gunController.OnHitNote += GunController_OnHitNote;
-    private void OnDestroy() => gunController.OnHitNote -= GunController_OnHitNote;
+    private Sequence sequence;
+    private Tween rotateTween;
 
-    private void GunController_OnHitNote(Note note) => Animate();
+    private void Awake()
+    {
+        gunController.OnHitNote -= GunController_OnHitNote;
+        gunController.OnHitNote += GunController_OnHitNote;
+    }
 
+    private void OnDestroy()
+    {
+        gunController.OnHitNote -= GunController_OnHitNote;
+    }
+
+    private void GunController_OnHitNote(Note note)
+    {
+        Animate();
+    }
+
+    private void Start()
+    {
+        this.hitMarkerImage.enabled = false;
+    }
     public void Animate()
     {
-        transform.DOScale(maxScale, duration).SetEase(easing).SmoothRewind();
-        transform.DOLocalRotate(new Vector3(0f, 0f, Random.Range(0, maxZRotation)), duration).SetEase(easing).SmoothRewind();
+        Debug.Log("hit note");
+        this.hitMarkerImage.enabled = true;
+        audioSource.Play();
+
+        if(sequence != null)
+            sequence.Kill();
+
+        if(rotateTween != null)
+            rotateTween.Kill();
+
+        sequence = DOTween.Sequence();
+        sequence.Append(transform.DOScale(maxScale, duration).SetEase(easing));
+        sequence.Append(transform.DOScale(1, duration).SetEase(easing)).OnComplete(() => this.hitMarkerImage.enabled = false);
+   
+        rotateTween = transform.DOLocalRotate(new Vector3(0f, 0f, Random.Range(0, maxZRotation)), duration).SetEase(easing).OnComplete( () => transform.DORewind());
+
     }
 }

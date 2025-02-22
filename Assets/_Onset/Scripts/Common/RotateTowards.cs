@@ -10,6 +10,6 @@ public class RotateTowards : MonoBehaviour
 
     void Update()
     {
-        this.transform.LookAt(target.forward * distance, Vector3.up);
+        this.transform.LookAt(target, Vector3.up);
     }
 }
