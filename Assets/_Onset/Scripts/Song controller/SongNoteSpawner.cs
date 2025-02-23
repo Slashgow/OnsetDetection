@@ -29,7 +29,10 @@ public class SongNoteSpawner : MonoBehaviour
     private int currentTrackIndex = 0;
     private int lastPeakIndex;
 
-    private float timeElapsedAudioSettings;
+    private double timeToHitAudioSettings;
+    private double timeElapsedAudio = 0;
+    private double lastFrameDSPTime;
+    private bool isAudioScheduled = false;
 
     private void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
 
@@ -38,12 +41,7 @@ public class SongNoteSpawner : MonoBehaviour
     {
         audioSource.clip = songLoader.AudioClip;
         audioSource.clip.LoadAudioData();
-
-        //Timer.Register(songSpawnData.TimeToHit(songSpawnData.Tracks[0]), () => {
-        //    Debug.Log("Start Playing audio");
-        //    audioSource.Play();
-        //});
-        Debug.Log($"time to hit : {songSpawnData.TimeToHit(songSpawnData.Tracks[0])}");
+        timeToHitAudioSettings = AudioSettings.dspTime + songSpawnData.timeToHitFirstTrack;
         hasStarted = true;
 
     }
@@ -54,22 +52,24 @@ public class SongNoteSpawner : MonoBehaviour
     {
         if (hasStarted)
         {
-            int indexToPlot = songLoader.GetIndexFromTime(timeElapsed) / 1024;
+            int indexToPlot = songLoader.GetIndexFromTime((float)timeElapsed) / 1024;
             timeElapsed += Time.deltaTime;
+
+            //if(lastFrameDSPTime > 0.001f)
+            //{
+            //    timeElapsedAudio = timeElapsedAudio + (AudioSettings.dspTime - lastFrameDSPTime);
+            //    Debug.Log("incrementing elapsed time audio");
+            //}
+                
             //Debug.Log(indexToPlot);
 
             double time = AudioSettings.dspTime;
-            Debug.Log(time);
-            if (time + 1.0f > time + songSpawnData.TimeToHit(songSpawnData.Tracks[0]))
+            if (!isAudioScheduled && time + 3f > timeToHitAudioSettings)
             {
-                // We are now approx. 1 second before the time at which the sound should play,
-                // so we will schedule it now in order for the system to have enough time
-                // to prepare the playback at the specified time. This may involve opening
-                // buffering a streamed file and should therefore take any worst-case delay into account.
-                audioSource.PlayScheduled(songSpawnData.TimeToHit(songSpawnData.Tracks[0]) + time);
+                audioSource.PlayScheduled(timeToHitAudioSettings);
+                //Debug.Log("scheduled audio");
+                isAudioScheduled = true;
             }
-
-
 
             if (lastIndex == indexToPlot || indexToPlot >= songLoader.OnsetDetection.SpectralFluxInfoList.Count)
                 return;
@@ -81,20 +81,19 @@ public class SongNoteSpawner : MonoBehaviour
                     ChooseTrack(indexToPlot);
                     SpawnNote();
                     lastPeakIndex = indexToPlot;
+
+                    //Debug.Log($"Audio source time {audioSource.time}");
+                    //Debug.Log($"Peak Time : {songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time}");
+                    float delay = (songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - audioSource.time) - songSpawnData.TimeToHit(songSpawnData.Tracks[currentTrackIndex]);
+
+                    if (delay > 0.2f)
+                        audioSource.time += delay;
+                    Debug.Log($"décalage : {delay}");
                 }
-            }
-            else
-            {
-               //for (int i = 0; i < songLoader.OnsetDetectionFrequencyClassified.FrequencyDomainCount; i++)
-               //{
-               //    if (songLoader.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].spectralFluxInfoList[indexToPlot].isPeak)
-               //    {
-               //        //Instantiate(notePrefab, GetTransformByDomain(preProcessAudioData.OnsetDetectionFrequencyClassified.SpectralFluxInfoListByFrequencyDomain[i].frequencyDomain));
-               //    }
-               //}
             }
 
             lastIndex = indexToPlot;
+            //lastFrameDSPTime = AudioSettings.dspTime;
             
         }
     }
@@ -102,7 +101,7 @@ public class SongNoteSpawner : MonoBehaviour
     private void ChooseTrack(int indexToPlot)
     {
         float timeBetweenNotes = songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - songLoader.OnsetDetection.SpectralFluxInfoList[lastPeakIndex].time;
-        if (timeBetweenNotes >= timeBetweenNotesToChangeTrack)
+        if (timeBetweenNotes >= timeBetweenNotesToChangeTrack && lastPeakIndex != 0)
         {
             currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.Tracks.Count;
         }
