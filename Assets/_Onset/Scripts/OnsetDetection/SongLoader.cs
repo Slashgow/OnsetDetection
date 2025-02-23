@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class SongLoader : MonoBehaviour
@@ -16,18 +17,26 @@ public class SongLoader : MonoBehaviour
     public OnsetDetection OnsetDetection { get; private set; }
 
     public event Action OnFinishLoadingSong;
+    
 
     private void Start()
     {
+        StartCoroutine(LoadAudioAsync($"Songs/{SaveSongFolderURL.GetFileName(GameManager.Instance.CurrentAudioClipData.Author, GameManager.Instance.CurrentAudioClipData.SongTitle)}"));
+    }
+
+    private IEnumerator LoadAudioAsync(string path)
+    {
+        ResourceRequest resourceRequest = Resources.LoadAsync<AudioClip>(path);
+        yield return resourceRequest;
+        audioClip = resourceRequest.asset as AudioClip;
         sampleRate = audioClip.frequency;
         LoadSongDataFromJson();
     }
-
     public void LoadSongDataFromJson()
     {
         if (!useFrequencyDomainClassification)
         {
-            string filePath = Application.persistentDataPath + $"{audioClip.name}_full.json";
+            string filePath = SaveSongFolderURL.GetAbsoluteURLSongMap(GameManager.Instance.CurrentAudioClipData); //TO DO   SaveSongFolderURL.GetAbsoluteURLSongMap();
      
 
             if (!System.IO.File.Exists(filePath))

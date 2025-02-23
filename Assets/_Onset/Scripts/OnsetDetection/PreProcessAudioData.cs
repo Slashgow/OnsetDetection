@@ -8,8 +8,8 @@ using System.Collections.Generic;
 public class PreProcessAudioData : MonoBehaviour
 {
     [SerializeField]
-    private AudioClip audioClip;
-    public AudioClip AudioClip => audioClip;
+    private AudioClipMapper audioClipMapper;
+    //public AudioClip AudioClip => audioClipData;
 
     [SerializeField, Range(0, 5)]
     private int windowSize = 3;
@@ -88,13 +88,13 @@ public class PreProcessAudioData : MonoBehaviour
 
     public void SetAudioClipData()
     {
-        numberOfChannels = audioClip.channels;
-        numberOfTotalSamples = audioClip.samples;
-        clipLength = audioClip.length;
-        sampleRate = audioClip.frequency;
+        numberOfChannels = audioClipMapper.AudioClip.channels;
+        numberOfTotalSamples = audioClipMapper.AudioClip.samples;
+        clipLength = audioClipMapper.AudioClip.length;
+        sampleRate = audioClipMapper.AudioClip.frequency;
 
-        multiChannelSamples = new float[audioClip.samples *  audioClip.channels];
-        audioClip.GetData(multiChannelSamples, 0);
+        multiChannelSamples = new float[audioClipMapper.AudioClip.samples *  audioClipMapper.AudioClip.channels];
+        audioClipMapper.AudioClip.GetData(multiChannelSamples, 0);
 
         Debug.Log("Set Data is Done");
     }
@@ -179,15 +179,21 @@ public class PreProcessAudioData : MonoBehaviour
         if (!useFrequencyDomainClassification)
         {
             string songData = JsonUtility.ToJson(this.OnsetDetection);
-            string filePath = Application.persistentDataPath + $"{audioClip.name}_full.json";
-            Debug.Log(filePath);
+            string creditsData = JsonUtility.ToJson(this.audioClipMapper.AudioClipData);
 
-            if (System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Delete(filePath);
-            }
+            string filePathMap = SaveSongFolderURL.GetAbsoluteURLSongMap(audioClipMapper.AudioClipData);
+            string filePathCredits = SaveSongFolderURL.GetAbsoluteURLSongCredits(audioClipMapper.AudioClipData);
+            Debug.Log(filePathMap);
 
-            System.IO.File.WriteAllText(filePath, songData);
+            if (System.IO.File.Exists(filePathMap))
+                System.IO.File.Delete(filePathMap);
+
+            if (System.IO.File.Exists(filePathCredits))
+                System.IO.File.Delete(filePathCredits);
+
+
+            System.IO.File.WriteAllText(filePathCredits, creditsData);
+            System.IO.File.WriteAllText(filePathMap, songData);
             
             
             Debug.Log("Sauvegarde effectué");

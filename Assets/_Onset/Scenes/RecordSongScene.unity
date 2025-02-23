@@ -230,7 +230,19 @@ PrefabInstance:
     - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
       propertyPath: audioClip
       value: 
+      objectReference: {fileID: 8300000, guid: 5df6fbfa6880a8f4fa97dbeed96f4244, type: 3}
+    - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
+      propertyPath: audioClipMapper.audioclip
+      value: 
       objectReference: {fileID: 8300000, guid: 324f8d15f7ac3534e9b6e703751e4a00, type: 3}
+    - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
+      propertyPath: audioClipMapper.audioclipData.author
+      value: Brutalismus 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
+      propertyPath: audioClipMapper.audioclipData.songTitle
+      value: Romantika
+      objectReference: {fileID: 0}
     - target: {fileID: 4785006130540127593, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -271,6 +283,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6503320858269436817, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 5df6fbfa6880a8f4fa97dbeed96f4244, type: 3}
+    - target: {fileID: 6503320858269436817, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5df6fbfa6880a8f4fa97dbeed96f4244, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

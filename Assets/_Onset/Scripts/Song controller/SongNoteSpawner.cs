@@ -29,18 +29,23 @@ public class SongNoteSpawner : MonoBehaviour
     private int currentTrackIndex = 0;
     private int lastPeakIndex;
 
+    private float timeElapsedAudioSettings;
+
     private void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
 
     private void OnDestroy() => songLoader.OnFinishLoadingSong -= SongLoader_OnFinishLoadingSong;
     private void SongLoader_OnFinishLoadingSong()
     {
         audioSource.clip = songLoader.AudioClip;
+        audioSource.clip.LoadAudioData();
+
+        //Timer.Register(songSpawnData.TimeToHit(songSpawnData.Tracks[0]), () => {
+        //    Debug.Log("Start Playing audio");
+        //    audioSource.Play();
+        //});
+        Debug.Log($"time to hit : {songSpawnData.TimeToHit(songSpawnData.Tracks[0])}");
         hasStarted = true;
-        Timer.Register(songSpawnData.TimeToHit(songSpawnData.Tracks[0]), () => {
-            Debug.Log("Start Playing audio");
-            audioSource.Play();
-        });
-        
+
     }
 
     private Transform GetTransformByDomain(FrequencyDomain domain) => transformByFrequencyDomains.First(transFormByFrequencyDomain => transFormByFrequencyDomain.Domain == domain).Transform;
@@ -49,10 +54,22 @@ public class SongNoteSpawner : MonoBehaviour
     {
         if (hasStarted)
         {
-            
             int indexToPlot = songLoader.GetIndexFromTime(timeElapsed) / 1024;
             timeElapsed += Time.deltaTime;
             //Debug.Log(indexToPlot);
+
+            double time = AudioSettings.dspTime;
+            Debug.Log(time);
+            if (time + 1.0f > time + songSpawnData.TimeToHit(songSpawnData.Tracks[0]))
+            {
+                // We are now approx. 1 second before the time at which the sound should play,
+                // so we will schedule it now in order for the system to have enough time
+                // to prepare the playback at the specified time. This may involve opening
+                // buffering a streamed file and should therefore take any worst-case delay into account.
+                audioSource.PlayScheduled(songSpawnData.TimeToHit(songSpawnData.Tracks[0]) + time);
+            }
+
+
 
             if (lastIndex == indexToPlot || indexToPlot >= songLoader.OnsetDetection.SpectralFluxInfoList.Count)
                 return;
