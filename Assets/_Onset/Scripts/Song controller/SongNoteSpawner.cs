@@ -22,6 +22,7 @@ public class SongNoteSpawner : MonoBehaviour
     private List<TransFormByFrequencyDomain> transformByFrequencyDomains;
 
     public event Action<NoteHitClassification> OnMissNoteReachedHitPoint;
+    public event Action OnSongEnd;
 
     public float timeElapsed = 0.0f;
     private int lastIndex = 0;
@@ -29,10 +30,12 @@ public class SongNoteSpawner : MonoBehaviour
     private int currentTrackIndex = 0;
     private int lastPeakIndex;
 
+
     private double timeToHitAudioSettings;
     private double timeElapsedAudio = 0;
     private double lastFrameDSPTime;
     private bool isAudioScheduled = false;
+    private bool hasEnded;
 
     private void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
 
@@ -41,6 +44,7 @@ public class SongNoteSpawner : MonoBehaviour
     {
         audioSource.clip = songLoader.AudioClip;
         audioSource.clip.LoadAudioData();
+        Debug.Log(audioSource.clip.length);
         timeToHitAudioSettings = AudioSettings.dspTime + songSpawnData.timeToHitFirstTrack;
         hasStarted = true;
 
@@ -50,18 +54,17 @@ public class SongNoteSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (hasStarted)
+        if (hasStarted && !hasEnded && timeElapsed >= audioSource.clip.length + songSpawnData.timeToHitFirstTrack)
+        {
+            Debug.Log("on song end");
+            OnSongEnd?.Invoke();
+            hasEnded = true;
+        }
+
+        if (hasStarted && !hasEnded)
         {
             int indexToPlot = songLoader.GetIndexFromTime((float)timeElapsed) / 1024;
             timeElapsed += Time.deltaTime;
-
-            //if(lastFrameDSPTime > 0.001f)
-            //{
-            //    timeElapsedAudio = timeElapsedAudio + (AudioSettings.dspTime - lastFrameDSPTime);
-            //    Debug.Log("incrementing elapsed time audio");
-            //}
-                
-            //Debug.Log(indexToPlot);
 
             double time = AudioSettings.dspTime;
             if (!isAudioScheduled && time + 3f > timeToHitAudioSettings)
@@ -93,9 +96,9 @@ public class SongNoteSpawner : MonoBehaviour
             }
 
             lastIndex = indexToPlot;
-            //lastFrameDSPTime = AudioSettings.dspTime;
-            
         }
+
+        
     }
 
     private void ChooseTrack(int indexToPlot)

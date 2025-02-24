@@ -4,7 +4,6 @@ using UnityEngine.Networking;
 using AnotherFileBrowser.Windows;
 using System.IO;
 using System;
-using System.Runtime.CompilerServices;
 
 public class SongImporter : MonoSingleton<SongImporter>
 {
@@ -12,7 +11,7 @@ public class SongImporter : MonoSingleton<SongImporter>
     public string Extension { get; private set; }
 
     public event Action OnEndImportAudioClip;
-    public string CurrentFilePath;
+    public string CurrentFilePath { get; private set; }
 
     public void OpenFileBrowser()
     {

@@ -2,6 +2,8 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
+using System;
 
 public class UIMenuSongLoader : MonoBehaviour
 {
@@ -17,6 +19,9 @@ public class UIMenuSongLoader : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
+    [SerializeField]
+    private Button startButton;
+
     private List<string> fileNames =new List<string>();
     private List<AudioClipData> audioClipDatas = new List<AudioClipData>();
 
@@ -24,6 +29,17 @@ public class UIMenuSongLoader : MonoBehaviour
     {
         SetAllAudioClipData();
         LoadUI();
+        startButton.onClick.AddListener(LoadScene);
+    }
+
+    private void OnDestroy()
+    {
+        startButton.onClick.RemoveListener(LoadScene);
+    }
+
+    private void LoadScene()
+    {
+        SceneLoader.Instance.LoadScene(1);
     }
 
     public void SetAllAudioClipData()

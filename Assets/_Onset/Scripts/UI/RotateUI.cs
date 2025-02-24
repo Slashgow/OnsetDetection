@@ -24,6 +24,7 @@ public class RotateUI : MonoBehaviour
         button.onValueChanged.AddListener(Animate);
     }
 
+
     private void Animate(bool value)
     {
         Debug.Log($"{this.gameObject.name} is {value}");
@@ -38,7 +39,7 @@ public class RotateUI : MonoBehaviour
         if (rotateTween != null)
             rotateTween.Kill();
 
-        rotateTween = this.transform.DOLocalRotate(new Vector3(0f, 0f, 180f), loopDuration).SetEase(easing).SetLoops(-1, LoopType.Incremental);
+        rotateTween = this.transform.DOLocalRotate(new Vector3(0f, 0f, 180f), loopDuration).SetEase(easing).SetLoops(-1, LoopType.Incremental).SetUpdate(true);
     }
 
     private void ResetToInitialRotation()
@@ -46,6 +47,12 @@ public class RotateUI : MonoBehaviour
         if (rotateTween != null)
             rotateTween.Kill();
 
-        rotateTween = this.transform.DOLocalRotate(Vector3.zero, backDuration).SetEase(easing);
+        rotateTween = this.transform.DOLocalRotate(Vector3.zero, backDuration).SetEase(easing).SetUpdate(true);
+    }
+
+    private void OnDestroy()
+    {
+        rotateTween.Kill();
+        button.onValueChanged.RemoveListener(Animate);
     }
 }

@@ -32,6 +32,7 @@ public class UIMenuSongImporter : MonoBehaviour
     {
         generateTrackButton.onClick.AddListener(GenerateTrack);
         startButton.interactable = false;
+        statusGenerationText.text = string.Empty;
     }
 
     private void OnEnable()

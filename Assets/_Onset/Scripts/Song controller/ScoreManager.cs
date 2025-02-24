@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class ScoreManager : MonoSingleton<ScoreManager>
@@ -9,67 +10,69 @@ public class ScoreManager : MonoSingleton<ScoreManager>
     [SerializeField]
     private GunController gunController;
 
-    [SerializeField, Range(1,100)]
-    private int scorePerHitBase = 10;
-
-    [SerializeField, Range(0,30)]
-    private int numberOfNoteToNextMultiplier = 10;
-
-    private int score = 0;
-    private int currentMultiplier = 1;
-    private int numberOfSuccessiveNotes = 0;
-
-    private int lastMultiplier = 1;
+    [SerializeField]
+    private ScoreData scoreData;
 
     public event Action<int, NoteHitClassification> OnScoreUpdated;
     public event Action<int> OnMultiplierUpdated;
+    public event Action<ScoreData> OnSondEnd;
 
 
     private void Start()
     {
         noteSpawner.OnMissNoteReachedHitPoint += NoteSpawner_OnNoteReachedHitPoint;
         gunController.OnHitNote += GunController_OnHitNote;
+        noteSpawner.OnSongEnd += NoteSpawner_OnSongEnd;
     }
+
+    private void NoteSpawner_OnSongEnd() => OnSondEnd?.Invoke(scoreData);
+
     private void OnDestroy()
     {
         noteSpawner.OnMissNoteReachedHitPoint -= NoteSpawner_OnNoteReachedHitPoint;
         gunController.OnHitNote -= GunController_OnHitNote;
+        noteSpawner.OnSongEnd -= NoteSpawner_OnSongEnd;
     }
 
     private void GunController_OnHitNote(Note note) => UpdateScore(note.NoteHitClassification);
 
     private void NoteSpawner_OnNoteReachedHitPoint(NoteHitClassification noteHitClassification) => UpdateScore(noteHitClassification);
 
+    private void IncreaseHit(NoteHitClassification hitClassification) => scoreData.ScoreClassifiedList.First(scoreClassified => scoreClassified.HitClassification == hitClassification).NumberOfHit++;
+
     private void UpdateScore(NoteHitClassification noteHitClassification)
     {
         if (noteHitClassification == NoteHitClassification.MISS)
         {
-            currentMultiplier = 1;
+            scoreData.CurrentMultiplier = 1;
 
-            if(lastMultiplier != currentMultiplier)
-                OnMultiplierUpdated?.Invoke(currentMultiplier);
+            if(scoreData.LastMultiplier != scoreData.CurrentMultiplier)
+                OnMultiplierUpdated?.Invoke(scoreData.CurrentMultiplier);
 
-            numberOfSuccessiveNotes = 0;
-            lastMultiplier = currentMultiplier;
+            scoreData.NumberOfSuccessiveNotes = 0;
+            scoreData.LastMultiplier = scoreData.CurrentMultiplier;
         }
         else
         {
-            numberOfSuccessiveNotes++;
+            scoreData.NumberOfSuccessiveNotes++;
 
-            if (numberOfSuccessiveNotes >= numberOfNoteToNextMultiplier * currentMultiplier)
+            if (scoreData.NumberOfSuccessiveNotes >= scoreData.NumberOfNoteToNextMultiplier * scoreData.CurrentMultiplier)
             {
-                currentMultiplier++;
-                currentMultiplier = Mathf.Clamp(currentMultiplier, 1, 4);
+                scoreData.CurrentMultiplier++;
+                scoreData.CurrentMultiplier = Mathf.Clamp(scoreData.CurrentMultiplier, 1, 4);
                 
-                if(lastMultiplier != currentMultiplier)
-                    OnMultiplierUpdated?.Invoke(currentMultiplier);
+                if(scoreData.LastMultiplier != scoreData.CurrentMultiplier)
+                    OnMultiplierUpdated?.Invoke(scoreData.CurrentMultiplier);
 
-                lastMultiplier = currentMultiplier;
+                scoreData.LastMultiplier = scoreData.CurrentMultiplier;
             }
 
-            score += scorePerHitBase * currentMultiplier;
-            OnScoreUpdated?.Invoke(score, noteHitClassification);
+            scoreData.Score += scoreData.ScorePerHitBase * scoreData.CurrentMultiplier;
+            OnScoreUpdated?.Invoke(scoreData.Score, noteHitClassification);
         }
+
+        IncreaseHit(noteHitClassification);
+        scoreData.TotalNumberOfNotes++;
       
     }
 
