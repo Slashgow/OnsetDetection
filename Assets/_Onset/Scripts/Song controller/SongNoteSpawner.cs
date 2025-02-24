@@ -86,9 +86,9 @@ public class SongNoteSpawner : MonoBehaviour
                     //Debug.Log($"Peak Time : {songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time}");
                     float delay = (songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - audioSource.time) - songSpawnData.TimeToHit(songSpawnData.Tracks[currentTrackIndex]);
 
-                    if (delay > 0.2f)
+                    if (delay > 0.1f)
                         audioSource.time += delay;
-                    Debug.Log($"décalage : {delay}");
+                    //Debug.Log($"décalage : {delay}");
                 }
             }
 

@@ -8,7 +8,9 @@ using System.Collections.Generic;
 public class PreProcessAudioData : MonoBehaviour
 {
     [SerializeField]
-    private AudioClipMapper audioClipMapper;
+    private bool generateTrackOnStart = false;
+
+    public AudioClipMapper audioClipMapper;
     //public AudioClip AudioClip => audioClipData;
 
     [SerializeField, Range(0, 5)]
@@ -43,9 +45,15 @@ public class PreProcessAudioData : MonoBehaviour
 
     private void Start()
     {
+        if(generateTrackOnStart)
+            GenerateTrack();
+    }
+
+    public void GenerateTrack()
+    {
         SetAudioClipData();
 
-        Thread backgroundThread  = new Thread(GetFullSpectrumThreaded);
+        Thread backgroundThread = new Thread(GetFullSpectrumThreaded);
         Debug.Log("Starting Background Thread");
         backgroundThread.Start();
     }
@@ -54,6 +62,7 @@ public class PreProcessAudioData : MonoBehaviour
     {
         if (IsAnalysedFinished && !wasRaised)
         {
+            Debug.Log("try saving");
             SaveSongDataToJson();
             OnFinishAnalyseFullSpectrum?.Invoke();
             wasRaised = true;
@@ -181,8 +190,8 @@ public class PreProcessAudioData : MonoBehaviour
             string songData = JsonUtility.ToJson(this.OnsetDetection);
             string creditsData = JsonUtility.ToJson(this.audioClipMapper.AudioClipData);
 
-            string filePathMap = SaveSongFolderURL.GetAbsoluteURLSongMap(audioClipMapper.AudioClipData);
-            string filePathCredits = SaveSongFolderURL.GetAbsoluteURLSongCredits(audioClipMapper.AudioClipData);
+            string filePathMap = SaveDataPaths.GetAbsolutePathSongMap(audioClipMapper.AudioClipData);
+            string filePathCredits = SaveDataPaths.GetAbsolutePathSongCredits(audioClipMapper.AudioClipData);
             Debug.Log(filePathMap);
 
             if (System.IO.File.Exists(filePathMap))

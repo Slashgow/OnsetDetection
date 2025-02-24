@@ -47,13 +47,32 @@ public class UISong : MonoBehaviour
     {
         if(audioClip != null && AudioSource.clip == audioClip)
             AudioSource.Stop();
+
+        SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
     }
 
     public void PlayMusic()
     {
-        if(audioClip == null)
-            audioClip = Resources.Load<AudioClip>($"Songs/{SaveSongFolderURL.GetFileName(audioClipData.Author, audioClipData.SongTitle)}");
+        Debug.Log(SaveDataPaths.GetAbsolutePathAudioClip(audioClipData));
+        
 
+        if(audioClip == null)
+        {
+            StartCoroutine(SongImporter.Instance.LoadAudioClip(SaveDataPaths.GetAbsolutePathAudioClip(audioClipData)));
+            SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
+            SongImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
+        }
+        else
+        {
+            AudioSource.clip = audioClip;
+            AudioSource.Play();
+        }
+    }
+
+    private void SongImporter_OnEndImportAudioClip()
+    {
+        Debug.Log("on import audio clip end");
+        audioClip = SongImporter.Instance.AudioClip;
         AudioSource.clip = audioClip;
         AudioSource.Play();
     }

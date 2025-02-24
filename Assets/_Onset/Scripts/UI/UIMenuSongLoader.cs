@@ -31,7 +31,7 @@ public class UIMenuSongLoader : MonoBehaviour
         //Debug.Log(Application.dataPath);
         //Debug.Log(SaveSongFolderURL.SaveSongAbsoluteFolderURL);
 
-        List<string> filesPathsCredits = Directory.GetFiles(SaveSongFolderURL.SaveSongAbsoluteFolderURL, "*_credit.json").ToList();
+        List<string> filesPathsCredits = Directory.GetFiles(SaveDataPaths.SaveSongAbsoluteFolderPath, "*_credit.json").ToList();
         filesPathsCredits.ForEach(filePath => fileNames.Add(Path.GetFullPath(filePath)));
 
         foreach (string filePath in filesPathsCredits)

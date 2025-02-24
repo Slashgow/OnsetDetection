@@ -232,16 +232,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 5df6fbfa6880a8f4fa97dbeed96f4244, type: 3}
     - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
+      propertyPath: generateTrackOnStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
       propertyPath: audioClipMapper.audioclip
       value: 
-      objectReference: {fileID: 8300000, guid: 324f8d15f7ac3534e9b6e703751e4a00, type: 3}
+      objectReference: {fileID: 8300000, guid: fa22032d4e95df3419620c4ab85013a9, type: 3}
     - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
       propertyPath: audioClipMapper.audioclipData.author
-      value: Brutalismus 3000
+      value: Erik Satie
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
+      propertyPath: audioClipMapper.audioclipData.extension
+      value: .mp3
       objectReference: {fileID: 0}
     - target: {fileID: 1222097979391215783, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
       propertyPath: audioClipMapper.audioclipData.songTitle
-      value: Romantika
+      value: Gymnopedie
       objectReference: {fileID: 0}
     - target: {fileID: 4785006130540127593, guid: caf08fa0f7b807c4fb2b5d71e9a16bd6, type: 3}
       propertyPath: m_LocalPosition.x

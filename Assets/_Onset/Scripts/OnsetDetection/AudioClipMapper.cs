@@ -11,4 +11,10 @@ public class AudioClipMapper
     [SerializeField]
     private AudioClipData audioclipData;
     public AudioClipData AudioClipData => audioclipData;
+
+    public AudioClipMapper(AudioClip audioclip, AudioClipData audioclipData)
+    {
+        this.audioclip = audioclip;
+        this.audioclipData = audioclipData;
+    }
 }

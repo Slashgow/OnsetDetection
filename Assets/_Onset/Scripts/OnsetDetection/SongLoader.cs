@@ -21,22 +21,29 @@ public class SongLoader : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(LoadAudioAsync($"Songs/{SaveSongFolderURL.GetFileName(GameManager.Instance.CurrentAudioClipData.Author, GameManager.Instance.CurrentAudioClipData.SongTitle)}"));
+        //StartCoroutine(LoadAudioAsync( $"{SaveSongFolderURL.GetAbsolutePathAudioClip(GameManager.Instance.CurrentAudioClipData)}" ));
+        LoadAudioAsync(SaveDataPaths.GetAbsolutePathAudioClip(GameManager.Instance.CurrentAudioClipData));
     }
 
-    private IEnumerator LoadAudioAsync(string path)
+    private void LoadAudioAsync(string path)
     {
-        ResourceRequest resourceRequest = Resources.LoadAsync<AudioClip>(path);
-        yield return resourceRequest;
-        audioClip = resourceRequest.asset as AudioClip;
+        StartCoroutine(SongImporter.Instance.LoadAudioClip(path));
+        SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
+        SongImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
+    }
+
+    private void SongImporter_OnEndImportAudioClip()
+    {
+        audioClip = SongImporter.Instance.AudioClip;
         sampleRate = audioClip.frequency;
         LoadSongDataFromJson();
     }
+
     public void LoadSongDataFromJson()
     {
         if (!useFrequencyDomainClassification)
         {
-            string filePath = SaveSongFolderURL.GetAbsoluteURLSongMap(GameManager.Instance.CurrentAudioClipData); //TO DO   SaveSongFolderURL.GetAbsoluteURLSongMap();
+            string filePath = SaveDataPaths.GetAbsolutePathSongMap(GameManager.Instance.CurrentAudioClipData); //TO DO   SaveSongFolderURL.GetAbsoluteURLSongMap();
      
 
             if (!System.IO.File.Exists(filePath))
