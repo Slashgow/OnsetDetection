@@ -33,7 +33,10 @@ public class UIMenuSongImporter : MonoBehaviour
         generateTrackButton.onClick.AddListener(GenerateTrack);
         startButton.interactable = false;
         statusGenerationText.text = string.Empty;
+        startButton.onClick.AddListener(LoadScene);
     }
+
+    private void LoadScene() => SceneLoader.Instance.LoadScene(1);
 
     private void OnEnable()
     {
@@ -43,6 +46,7 @@ public class UIMenuSongImporter : MonoBehaviour
     {
         generateTrackButton.onClick.RemoveListener(GenerateTrack);
         preProcessAudioData.OnFinishAnalyseFullSpectrum -= PreProcessAudioData_OnFinishAnalyseFullSpectrum;
+        startButton.onClick.RemoveListener(LoadScene);
     }
 
     private void PreProcessAudioData_OnFinishAnalyseFullSpectrum()

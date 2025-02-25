@@ -27,6 +27,7 @@ public class UIMenuController : MonoSingleton<UIMenuController>
     public void ShowOptions() => ShowOnly(MenuType.OPTIONS);
     public void ShowChooseSong() => ShowOnly(MenuType.CHOOSE_SONG);
     public void ShowImportSong() => ShowOnly(MenuType.IMPORT_SONG);
+    public void ShowPause() => ShowOnly(MenuType.PAUSE);    
 
     public void ShowMenu() => ShowOnly(MenuType.MAIN);
 

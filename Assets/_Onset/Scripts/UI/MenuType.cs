@@ -6,5 +6,6 @@ public enum MenuType
     OPTIONS,
     CREDIT,
     RESULT,
-    IN_GAME
+    IN_GAME,
+    PAUSE
 }

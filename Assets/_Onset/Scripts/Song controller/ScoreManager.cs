@@ -22,7 +22,29 @@ public class ScoreManager : MonoSingleton<ScoreManager>
     {
         noteSpawner.OnMissNoteReachedHitPoint += NoteSpawner_OnNoteReachedHitPoint;
         gunController.OnHitNote += GunController_OnHitNote;
+        gunController.OnShootNoNote += GunController_OnShootNoNote;
         noteSpawner.OnSongEnd += NoteSpawner_OnSongEnd;
+    }
+    private void OnDestroy()
+    {
+        noteSpawner.OnMissNoteReachedHitPoint -= NoteSpawner_OnNoteReachedHitPoint;
+        gunController.OnHitNote -= GunController_OnHitNote;
+        gunController.OnShootNoNote -= GunController_OnShootNoNote;
+        noteSpawner.OnSongEnd -= NoteSpawner_OnSongEnd;
+    }
+
+    private void GunController_OnShootNoNote()
+    {
+        scoreData.Score -= scoreData.ScoreDecreasePerShoot;
+        OnScoreUpdated?.Invoke(scoreData.Score, NoteHitClassification.MISS);
+        
+        scoreData.CurrentMultiplier = 1;
+
+        if (scoreData.CurrentMultiplier != scoreData.LastMultiplier)
+            OnMultiplierUpdated?.Invoke(scoreData.CurrentMultiplier);
+
+        scoreData.NumberOfSuccessiveNotes = 0;
+        scoreData.LastMultiplier = scoreData.CurrentMultiplier;
     }
 
     private void NoteSpawner_OnSongEnd()
@@ -41,12 +63,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         OnSongEnd?.Invoke(scoreData);
     }
 
-    private void OnDestroy()
-    {
-        noteSpawner.OnMissNoteReachedHitPoint -= NoteSpawner_OnNoteReachedHitPoint;
-        gunController.OnHitNote -= GunController_OnHitNote;
-        noteSpawner.OnSongEnd -= NoteSpawner_OnSongEnd;
-    }
+
 
     private void GunController_OnHitNote(Note note) => UpdateScore(note.NoteHitClassification);
 

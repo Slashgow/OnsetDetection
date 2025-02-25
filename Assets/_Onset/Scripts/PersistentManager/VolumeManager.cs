@@ -18,8 +18,10 @@ public class VolumeManager : PersistentMonoSingleton<VolumeManager>
     public const string SFX_VOLUME_ID = "SFX_VOLUME";
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         if(PlayerPrefs.HasKey(MAIN_VOLUME_ID))
             CurrentMainVolume = PlayerPrefs.GetFloat(MAIN_VOLUME_ID);
         else
@@ -34,6 +36,13 @@ public class VolumeManager : PersistentMonoSingleton<VolumeManager>
             CurrentSFXVolume = PlayerPrefs.GetFloat(SFX_VOLUME_ID);
         else 
             CurrentSFXVolume = defaultSfXVolume;
+    }
+
+    private void Start()
+    {
+        SetMainVolume(CurrentMainVolume);
+        SetMusicVolume(CurrentMusicVolume);
+        SetSFXVolume(CurrentSFXVolume);
     }
 
     public void SetMainVolume(float value)

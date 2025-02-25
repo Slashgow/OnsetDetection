@@ -17,6 +17,11 @@ public class SettingManager : PersistentMonoSingleton<SettingManager>
             CurrentMouseSensitivity = defaultMouseSensitivty;
     }
 
+    private void Start()
+    {
+        SetMouseSensitivity(CurrentMouseSensitivity);
+    }
+
     public void SetMouseSensitivity(float value)
     {
         CurrentMouseSensitivity = value;

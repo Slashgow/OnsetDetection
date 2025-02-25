@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -14,6 +13,10 @@ public class ScoreData
     [SerializeField, Range(0, 30)]
     private int numberOfNoteToNextMultiplier = 10;
     public int NumberOfNoteToNextMultiplier => numberOfNoteToNextMultiplier;
+
+    [SerializeField, Range(0,20)]
+    private int scoreDecreasePerShoot;
+    public int ScoreDecreasePerShoot => scoreDecreasePerShoot;
 
     public int HighScore {  get; set; }
     public int Score { get; set; }

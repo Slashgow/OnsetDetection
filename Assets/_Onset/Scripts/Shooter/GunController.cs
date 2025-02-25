@@ -31,6 +31,7 @@ public class GunController : MonoBehaviour
     private ShakeData shootShake;
 
     public event Action<Note> OnHitNote;
+    public event Action OnShootNoNote;
 
     private Vector2 ScreenCenterPoint;
     public void Shoot(InputAction.CallbackContext context)
@@ -44,6 +45,10 @@ public class GunController : MonoBehaviour
                 if(hitInfo.transform.TryGetComponent(out Note note))
                 {
                     UpdateNoteInfo(note);
+                }
+                else
+                {
+                    OnShootNoNote?.Invoke();
                 }
 
                 CameraShakerHandler.Shake(shootShake);

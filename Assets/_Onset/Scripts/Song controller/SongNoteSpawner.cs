@@ -15,9 +15,6 @@ public class SongNoteSpawner : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
-    [SerializeField, Range(0f,2f)]
-    private float timeBetweenNotesToChangeTrack;
-
     [SerializeField]
     private List<TransFormByFrequencyDomain> transformByFrequencyDomains;
 
@@ -32,10 +29,10 @@ public class SongNoteSpawner : MonoBehaviour
 
 
     private double timeToHitAudioSettings;
-    private double timeElapsedAudio = 0;
-    private double lastFrameDSPTime;
     private bool isAudioScheduled = false;
     private bool hasEnded;
+
+    private float timeElapsedOnSameTrack = 0.0f;
 
     private void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
 
@@ -104,10 +101,17 @@ public class SongNoteSpawner : MonoBehaviour
     private void ChooseTrack(int indexToPlot)
     {
         float timeBetweenNotes = songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - songLoader.OnsetDetection.SpectralFluxInfoList[lastPeakIndex].time;
-        if (timeBetweenNotes >= timeBetweenNotesToChangeTrack && lastPeakIndex != 0)
+
+        if (timeBetweenNotes >= songSpawnData.TimeBetweenNotesToChangeTrack && lastPeakIndex != 0)
         {
             currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.Tracks.Count;
         }
+        else if(timeElapsedOnSameTrack >= songSpawnData.MaximumTimeOnTrack)
+        {
+            currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.Tracks.Count;
+        }
+
+        timeElapsedOnSameTrack += Time.deltaTime;
     }
 
     private void SpawnNote()
