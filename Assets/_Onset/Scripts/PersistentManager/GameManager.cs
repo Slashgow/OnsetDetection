@@ -26,10 +26,12 @@ public class GameManager : PersistentMonoSingleton<GameManager>
     public void Pause()
     {
         Time.timeScale = 0.0f;
+        AudioListener.pause = true;
     }
 
     public void Resume()
     {
         Time.timeScale = 1.0f;
+        AudioListener.pause = false;
     }
 }

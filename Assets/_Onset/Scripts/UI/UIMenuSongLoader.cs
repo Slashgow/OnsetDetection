@@ -27,6 +27,7 @@ public class UIMenuSongLoader : MonoBehaviour
 
     private void Start()
     {
+        audioSource.ignoreListenerPause = true;
         SetAllAudioClipData();
         LoadUI();
         startButton.onClick.AddListener(LoadScene);

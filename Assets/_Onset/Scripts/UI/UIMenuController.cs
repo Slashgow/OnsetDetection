@@ -17,10 +17,10 @@ public class UIMenuController : MonoSingleton<UIMenuController>
     public void Back()
     {
         Debug.Log($"is in game : {GameManager.Instance.IsInGame}");
-        //if(!GameManager.Instance.IsInGame)
+        if(!GameManager.Instance.IsInGame)
             ShowOnly(MenuType.MAIN);
-        //else
-        //    ShowOnly(MenuType.IN_GAME);
+        else
+            ShowOnly(MenuType.IN_GAME);
     }
 
     public void ShowCredit() => ShowOnly(MenuType.CREDIT);

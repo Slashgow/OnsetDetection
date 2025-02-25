@@ -581,6 +581,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1772559137}
   - component: {fileID: 1772559136}
+  - component: {fileID: 1772559138}
+  - component: {fileID: 1772559139}
   m_Layer: 0
   m_Name: GAME MANAGER
   m_TagString: Untagged
@@ -615,6 +617,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1772559138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772559135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03698398b6ead3a4caa9fcbd5a0a451d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMainVolume: 1
+  defaultMusicVolume: 0.0001
+  defaultSfXVolume: 1
+  audioMixer: {fileID: 24100000, guid: 6d65f11254afb7d4285ec03ff21b6641, type: 2}
+--- !u!114 &1772559139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772559135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c9635870f7b89842ae70b1db26ed2ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMouseSensitivty: 0.77
 --- !u!1001 &4730650246197813611
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1200,6 +1200,7 @@ GameObject:
   - component: {fileID: 7021209864700193560}
   - component: {fileID: 339113827744461393}
   - component: {fileID: 7715804832825066802}
+  - component: {fileID: 238848196700795100}
   m_Layer: 5
   m_Name: Options Menu
   m_TagString: Untagged
@@ -1258,10 +1259,19 @@ MonoBehaviour:
   mainVolumeSlider: {fileID: 2175902251761814374}
   musicSlider: {fileID: 62076420515290514}
   sfxSlider: {fileID: 7298658225043398507}
-  defaultMainVolume: 0.5
-  defaultMusicVolume: 0.5
-  defaultSfXVolume: 0.5
-  audioMixer: {fileID: 24100000, guid: 6d65f11254afb7d4285ec03ff21b6641, type: 2}
+--- !u!114 &238848196700795100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883378603269418145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817225662e30fff4d81484c87b24d461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSensitivitySlider: {fileID: 2651854508819454661}
 --- !u!1 &937630042569020878
 GameObject:
   m_ObjectHideFlags: 0
@@ -10027,6 +10037,46 @@ PrefabInstance:
       propertyPath: m_text
       value: mouse sensitivity
       objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_Value
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_MaxValue
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_MinValue
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 238848196700795100}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetMouseSensitivity
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UISettings, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6658984253690172520, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
       propertyPath: m_Name
       value: Slider group Option (3)
@@ -10121,3 +10171,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8136117424268868062, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
   m_PrefabInstance: {fileID: 9193445217807291751}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2651854508819454661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6582268241506815906, guid: 4e13bad6686f522449baf00573c4dc8a, type: 3}
+  m_PrefabInstance: {fileID: 9193445217807291751}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
