@@ -15,7 +15,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
 
     public event Action<int, NoteHitClassification> OnScoreUpdated;
     public event Action<int> OnMultiplierUpdated;
-    public event Action<ScoreData> OnSondEnd;
+    public event Action<ScoreData> OnSongEnd;
 
 
     private void Start()
@@ -25,7 +25,21 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         noteSpawner.OnSongEnd += NoteSpawner_OnSongEnd;
     }
 
-    private void NoteSpawner_OnSongEnd() => OnSondEnd?.Invoke(scoreData);
+    private void NoteSpawner_OnSongEnd()
+    {
+        int lastHighScore = SaveDataPaths.GetHighScore(GameManager.Instance.CurrentAudioClipData);
+        if (scoreData.Score > lastHighScore)
+        {
+            scoreData.HighScore = scoreData.Score;
+            SaveDataPaths.SetHighScore(GameManager.Instance.CurrentAudioClipData, scoreData.HighScore);
+        }
+        else
+        {
+            scoreData.HighScore = lastHighScore;
+        }
+
+        OnSongEnd?.Invoke(scoreData);
+    }
 
     private void OnDestroy()
     {

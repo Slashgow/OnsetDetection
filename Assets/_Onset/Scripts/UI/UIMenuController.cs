@@ -33,12 +33,19 @@ public class UIMenuController : MonoSingleton<UIMenuController>
     public void ShowOnly(MenuType menuType)
     {
         if(menuType != MenuType.IN_GAME)
+        {
             GameManager.Instance.Pause();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+           
         else
+        {
             GameManager.Instance.Resume();
-
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+            
         HideAllMenus();
         menus.First(menu => menu.MenuType == menuType).Show();
     }

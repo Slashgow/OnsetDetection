@@ -24,11 +24,12 @@ public class UIResult : MonoBehaviour
     {
         restartButton.onClick.AddListener(Restart);
         backButton.onClick.AddListener(GoToMainMenu);
-
+        Debug.Log("try register on song end event");
         if(FindFirstObjectByType<ScoreManager>() != null)
         {
-            ScoreManager.Instance.OnSondEnd -= ScoreManager_OnSondEnd;
-            ScoreManager.Instance.OnSondEnd += ScoreManager_OnSondEnd;
+            Debug.Log("Register score manager on end song");
+            ScoreManager.Instance.OnSongEnd -= ScoreManager_OnSondEnd;
+            ScoreManager.Instance.OnSongEnd += ScoreManager_OnSondEnd;
         }
     }
     private void OnDestroy()
@@ -39,6 +40,7 @@ public class UIResult : MonoBehaviour
 
     private void ScoreManager_OnSondEnd(ScoreData scoreData)
     {
+        Debug.Log("score manager on song end");
         UIMenuController.Instance.ShowOnly(MenuType.RESULT);
 
         excellentText.text = scoreData.GetScoreClassified(NoteHitClassification.EXCELLENT).NumberOfHit.ToString();
@@ -47,8 +49,9 @@ public class UIResult : MonoBehaviour
         lateText.text = scoreData.GetScoreClassified(NoteHitClassification.LATE).NumberOfHit.ToString();
         missText.text = scoreData.GetScoreClassified(NoteHitClassification.MISS).NumberOfHit.ToString();
 
-        percentOfNoteHitText.text = scoreData.PercentageOfNoteHit.ToString();
+        percentOfNoteHitText.text = $"{scoreData.PercentageOfNoteHit.ToString()} %";
         scoreText.text = scoreData.Score.ToString();
+        highScoreText.text = scoreData.HighScore.ToString();
     }
 
     private void Restart()

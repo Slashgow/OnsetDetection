@@ -49,7 +49,7 @@ public class HitMarker : MonoBehaviour
     }
     public void Animate()
     {
-        Debug.Log("hit note");
+        //Debug.Log("hit note");
         this.hitMarkerImage.enabled = true;
         audioSource.Play();
 

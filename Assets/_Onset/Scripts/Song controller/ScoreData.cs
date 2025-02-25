@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -14,6 +15,7 @@ public class ScoreData
     private int numberOfNoteToNextMultiplier = 10;
     public int NumberOfNoteToNextMultiplier => numberOfNoteToNextMultiplier;
 
+    public int HighScore {  get; set; }
     public int Score { get; set; }
     public int CurrentMultiplier { get; set; }
     public int NumberOfSuccessiveNotes { get; set; }
@@ -26,10 +28,11 @@ public class ScoreData
             {
                 if(scoreClassified.HitClassification != NoteHitClassification.MISS)
                 {
-                    sumTotalHit++;
+                    sumTotalHit += scoreClassified.NumberOfHit;
                 }
             }
-            return sumTotalHit / TotalNumberOfNotes;
+            Debug.Log(sumTotalHit);
+            return (sumTotalHit * 100 )/ TotalNumberOfNotes;
         }
     }
 
