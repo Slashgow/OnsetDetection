@@ -1,5 +1,6 @@
 using System;
 using Unity.Cinemachine;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,7 +21,6 @@ public class SimpleThirdPersonController : MonoBehaviour
     [Tooltip("How far in degrees can you move the camera down")]
     public float BottomClamp = -30.0f;
 
-
     [Tooltip("How far in degrees can you move the camera up"), Range(-180f,0f)]
     public float LeftClamp = -90f;
 
@@ -32,6 +32,9 @@ public class SimpleThirdPersonController : MonoBehaviour
 
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
+
+    [Range(0.0f,0.3f)]
+    public float cameraRotationSmoothTime = 0.10f;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -59,6 +62,10 @@ public class SimpleThirdPersonController : MonoBehaviour
     private float _rotationVelocity;
     private const float _threshold = 0.01f;
 
+    private float _targetRotationYawCamera;
+    private float _targetRotationPitchCamera;
+    private float _cameraRotationVelocityYaw;
+    private float _cameraRotationVelocityPitch;
 
     private void Awake()
     {
@@ -125,9 +132,15 @@ public class SimpleThirdPersonController : MonoBehaviour
         _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, LeftClamp, RightClamp);
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-        // Cinemachine will follow this target
+        
+
+        //Cinemachine will follow this target
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
             _cinemachineTargetYaw, 0.0f);
+        
+        //Quaternion targetRotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,   _cinemachineTargetYaw, 0.0f);
+        //
+        //CinemachineCameraTarget.transform.rotation = Quaternion.Slerp()
     }
 
 
