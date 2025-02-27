@@ -130,6 +130,8 @@ namespace Unity.Cinemachine.Samples
         void UpdatePlayerRotation()
         {
             var t = transform;
+            //VerticalLook.Value *= SettingManager.Instance.CurrentMouseSensitivity;
+            //HorizontalLook.Value *= SettingManager.Instance.CurrentMouseSensitivity;
             t.localRotation = Quaternion.Euler(VerticalLook.Value, HorizontalLook.Value, 0);
             m_DesiredWorldRotation = t.rotation;
             switch (PlayerRotation)

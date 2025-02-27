@@ -40,6 +40,7 @@ public class UIMenuSongImporter : MonoBehaviour
 
     private void OnEnable()
     {
+        generateTrackButton.interactable =true;
         preProcessAudioData.OnFinishAnalyseFullSpectrum += PreProcessAudioData_OnFinishAnalyseFullSpectrum;
     }
     private void OnDestroy()
@@ -59,8 +60,10 @@ public class UIMenuSongImporter : MonoBehaviour
 
     private void GenerateTrack()
     {
+        
         if(!string.IsNullOrEmpty(authorInputField.text) && !string.IsNullOrEmpty(songInputField.text))
         {
+            generateTrackButton.interactable = false;
             statusGenerationText.text = generating;
             audioClipData = new AudioClipData(songInputField.text, authorInputField.text, SongImporter.Instance.Extension);
             preProcessAudioData.audioClipMapper = new AudioClipMapper(SongImporter.Instance.AudioClip, audioClipData);

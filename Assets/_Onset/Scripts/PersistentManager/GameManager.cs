@@ -21,6 +21,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
             IsInGame = true;
         else
             IsInGame= false;
+        Resume();
     }
 
     public void Pause()

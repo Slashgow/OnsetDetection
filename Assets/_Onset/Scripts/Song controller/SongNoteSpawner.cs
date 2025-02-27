@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityTimer;
 
 public class SongNoteSpawner : MonoBehaviour
 {
@@ -33,8 +32,10 @@ public class SongNoteSpawner : MonoBehaviour
     private bool hasEnded;
 
     private float timeElapsedOnSameTrack = 0.0f;
+    private bool startTrackingTimeOnTrack = false;
 
     private void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
+    private void Start() => songSpawnData.Initialize();
 
     private void OnDestroy() => songLoader.OnFinishLoadingSong -= SongLoader_OnFinishLoadingSong;
     private void SongLoader_OnFinishLoadingSong()
@@ -42,7 +43,7 @@ public class SongNoteSpawner : MonoBehaviour
         audioSource.clip = songLoader.AudioClip;
         audioSource.clip.LoadAudioData();
         Debug.Log(audioSource.clip.length);
-        timeToHitAudioSettings = AudioSettings.dspTime + songSpawnData.timeToHitFirstTrack;
+        timeToHitAudioSettings = AudioSettings.dspTime + songSpawnData.TimeToHitFirstTrack;
         hasStarted = true;
 
     }
@@ -51,7 +52,7 @@ public class SongNoteSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (hasStarted && !hasEnded && timeElapsed >= audioSource.clip.length + songSpawnData.timeToHitFirstTrack)
+        if (hasStarted && !hasEnded && timeElapsed >= audioSource.clip.length + songSpawnData.TimeToHitFirstTrack)
         {
             Debug.Log("on song end");
             OnSongEnd?.Invoke();
@@ -62,6 +63,9 @@ public class SongNoteSpawner : MonoBehaviour
         {
             int indexToPlot = songLoader.GetIndexFromTime((float)timeElapsed) / 1024;
             timeElapsed += Time.deltaTime;
+
+            if (startTrackingTimeOnTrack)
+                timeElapsedOnSameTrack += Time.deltaTime;
 
             double time = AudioSettings.dspTime;
             if (!isAudioScheduled && time + 3f > timeToHitAudioSettings)
@@ -84,7 +88,8 @@ public class SongNoteSpawner : MonoBehaviour
 
                     //Debug.Log($"Audio source time {audioSource.time}");
                     //Debug.Log($"Peak Time : {songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time}");
-                    float delay = (songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - audioSource.time) - songSpawnData.TimeToHit(songSpawnData.Tracks[currentTrackIndex]);
+                    float delay = (songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - audioSource.time) - 
+                        songSpawnData.TimeToHit(songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex]);
 
                     if (delay > 0.1f)
                         audioSource.time += delay;
@@ -93,6 +98,7 @@ public class SongNoteSpawner : MonoBehaviour
             }
 
             lastIndex = indexToPlot;
+
         }
 
         
@@ -100,18 +106,21 @@ public class SongNoteSpawner : MonoBehaviour
 
     private void ChooseTrack(int indexToPlot)
     {
+        startTrackingTimeOnTrack = true;
         float timeBetweenNotes = songLoader.OnsetDetection.SpectralFluxInfoList[indexToPlot].time - songLoader.OnsetDetection.SpectralFluxInfoList[lastPeakIndex].time;
 
-        if (timeBetweenNotes >= songSpawnData.TimeBetweenNotesToChangeTrack && lastPeakIndex != 0)
+        if (timeBetweenNotes >= songSpawnData.CurrentSongSpawnData.TimeBetweenNotesToChangeTrack && lastPeakIndex != 0)
         {
-            currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.Tracks.Count;
+            currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.CurrentSongSpawnData.Tracks.Count;
         }
-        else if(timeElapsedOnSameTrack >= songSpawnData.MaximumTimeOnTrack)
+        else if(timeElapsedOnSameTrack >= songSpawnData.CurrentSongSpawnData.MaximumTimeOnTrack && timeBetweenNotes >= songSpawnData.CurrentSongSpawnData.MinTimeAbsoluteBetweenNoteToChangeTrack)
         {
-            currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.Tracks.Count;
+            Debug.Log("too much time on same track");
+            currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.CurrentSongSpawnData.Tracks.Count;
+            timeElapsedOnSameTrack = 0.0f;
         }
 
-        timeElapsedOnSameTrack += Time.deltaTime;
+       
     }
 
     private void SpawnNote()
@@ -119,13 +128,13 @@ public class SongNoteSpawner : MonoBehaviour
         GameObject noteGameObjectInstance = songSpawnData.NotePool.GetPrefabFromPool();
 
         TrackFollower trackFollowerInstance = noteGameObjectInstance.GetComponent<TrackFollower>();
-        float noteSpeed = currentTrackIndex == 0 ? songSpawnData.NoteSpeed : songSpawnData.GetSpeedToMatchFirstTrack(songSpawnData.Tracks[currentTrackIndex]); 
-        trackFollowerInstance.Setup(songSpawnData.Tracks[currentTrackIndex].PathCreatorToHitNote, songSpawnData.Tracks[currentTrackIndex].PathCreatorFromHitNoteToPlanet, noteSpeed);
+        float noteSpeed = currentTrackIndex == 0 ? songSpawnData.CurrentSongSpawnData.NoteSpeed : songSpawnData.GetSpeedToMatchFirstTrack(songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex]); 
+        trackFollowerInstance.Setup(songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex].PathCreatorToHitNote, songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex].PathCreatorFromHitNoteToPlanet, noteSpeed);
         
         Note noteInstance = noteGameObjectInstance.GetComponent<Note>();
         noteInstance.OnMissNote -= NoteInstance_OnMissHitPoint;
         noteInstance.OnMissNote += NoteInstance_OnMissHitPoint;
-        noteInstance.Setup(songSpawnData.NotePool, songSpawnData.TimeToHit(songSpawnData.Tracks[currentTrackIndex]));
+        noteInstance.Setup(songSpawnData.NotePool, songSpawnData.TimeToHit(songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex]));
 
     }
 

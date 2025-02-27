@@ -1,3 +1,5 @@
+using System;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +19,13 @@ public class SimpleThirdPersonController : MonoBehaviour
 
     [Tooltip("How far in degrees can you move the camera down")]
     public float BottomClamp = -30.0f;
+
+
+    [Tooltip("How far in degrees can you move the camera up"), Range(-180f,0f)]
+    public float LeftClamp = -90f;
+
+    [Tooltip("How far in degrees can you move the camera down"), Range(0f,180f)]
+    public float RightClamp = 90f;
 
     [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
     public float CameraAngleOverride = 0.0f;
@@ -46,8 +55,10 @@ public class SimpleThirdPersonController : MonoBehaviour
 
     private SimplePlayerInput _input;
     private GameObject _mainCamera;
-
+    private float _targetRotation;
+    private float _rotationVelocity;
     private const float _threshold = 0.01f;
+
 
     private void Awake()
     {
@@ -72,9 +83,30 @@ public class SimpleThirdPersonController : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        RecenterPlayer();
+        //CameraRotation();
+    }
+
     private void LateUpdate()
     {
+        //RecenterPlayer();
+
         CameraRotation();
+    }
+    private void OnAnimatorMove()
+    {
+        
+    }
+    public void RecenterPlayer(float damping = 0)
+    {
+        _targetRotation = _mainCamera.transform.eulerAngles.y;
+        //Debug.Log(_targetRotation);
+        float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
+        //Debug.Log(rotation);
+        if(!float.IsNaN(rotation))
+            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
     }
 
     private void CameraRotation()
@@ -85,12 +117,12 @@ public class SimpleThirdPersonController : MonoBehaviour
             //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * SettingManager.Instance.CurrentMouseSensitivity;
-            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * SettingManager.Instance.CurrentMouseSensitivity;
+            _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * SettingManager.Instance.CurrentSensitivity;
+            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * SettingManager.Instance.CurrentSensitivity;
         }
 
         // clamp our rotations so our values are limited 360 degrees
-        _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+        _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, LeftClamp, RightClamp);
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
         // Cinemachine will follow this target
@@ -104,5 +136,15 @@ public class SimpleThirdPersonController : MonoBehaviour
         if (lfAngle < -360f) lfAngle += 360f;
         if (lfAngle > 360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
+    }
+
+
+    float NormalizeAngle(float angle)
+    {
+        while (angle > 180)
+            angle -= 360;
+        while (angle < -180)
+            angle += 360;
+        return angle;
     }
 }

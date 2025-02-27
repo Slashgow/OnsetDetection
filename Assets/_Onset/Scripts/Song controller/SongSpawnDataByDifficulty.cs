@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 [Serializable]
@@ -15,11 +16,15 @@ public class SongSpawnDataByDifficulty
 
     [SerializeField, Range(0f, 2f)]
     private float timeBetweenNotesToChangeTrack;
-    public float TimeBetweenNotesToChangeTrack;
+    public float TimeBetweenNotesToChangeTrack => timeBetweenNotesToChangeTrack;
 
     [SerializeField, Range(0f, 20f)]
     private float maximumTimeOnTrack = 10f;
     public float MaximumTimeOnTrack => maximumTimeOnTrack;
+
+    [SerializeField, Range(0f, 0.8f)]
+    private float minTimeAbsoluteBetweenNoteToChangeTrack;
+    public float MinTimeAbsoluteBetweenNoteToChangeTrack => minTimeAbsoluteBetweenNoteToChangeTrack;
 
     [SerializeField, Range(0f, 10f)]
     private float noteSpeed;

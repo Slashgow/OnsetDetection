@@ -1,32 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class SongSpawnData
 {
     [SerializeField]
-    private List<Track> tracks;
-    public List<Track> Tracks => tracks;
-
-    [SerializeField, Range(0f, 2f)]
-    private float timeBetweenNotesToChangeTrack;
-    public float TimeBetweenNotesToChangeTrack;
-
-    [SerializeField, Range(0f, 20f)]
-    private float maximumTimeOnTrack = 10f;
-    public float MaximumTimeOnTrack => maximumTimeOnTrack;
-
-    [SerializeField, Range(0f, 10f)]
-    private float noteSpeed;
-    public float NoteSpeed => noteSpeed;
+    private List<SongSpawnDataByDifficulty> spawnDataByDifficultyList;
 
     [SerializeField]
     private PoolingSystem notePool;
     public PoolingSystem NotePool => notePool;
 
-    public float timeToHitFirstTrack => tracks[0].PathCreatorToHitNote.path.length / noteSpeed;
+    public SongSpawnDataByDifficulty GetSongSpawnDataByDifficulty(Difficulty difficulty) => spawnDataByDifficultyList.First(spawnData =>  spawnData.Difficulty == difficulty);
+
+    private float timeToHitFirstTrack;
+    public float TimeToHitFirstTrack => timeToHitFirstTrack;
+
+    private SongSpawnDataByDifficulty currentSongSpawnData;
+    public SongSpawnDataByDifficulty CurrentSongSpawnData => currentSongSpawnData;
+
+    public void Initialize()
+    {
+        currentSongSpawnData = GetSongSpawnDataByDifficulty(DifficultyManager.Instance.CurrentDifficulty);
+        timeToHitFirstTrack = currentSongSpawnData.Tracks[0].PathCreatorToHitNote.path.length / currentSongSpawnData.NoteSpeed;
+ 
+        currentSongSpawnData.Tracks.ForEach(track => track.InitTarget()); 
+    }
+
     public float TimeToHit(Track track) => track.PathCreatorToHitNote.path.length / GetSpeedToMatchFirstTrack(track);
 
     public float GetSpeedToMatchFirstTrack(Track track) => track.PathCreatorToHitNote.path.length / timeToHitFirstTrack;
+
+    
 }
