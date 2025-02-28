@@ -115,7 +115,7 @@ public class SongNoteSpawner : MonoBehaviour
         }
         else if(timeElapsedOnSameTrack >= songSpawnData.CurrentSongSpawnData.MaximumTimeOnTrack && timeBetweenNotes >= songSpawnData.CurrentSongSpawnData.MinTimeAbsoluteBetweenNoteToChangeTrack)
         {
-            Debug.Log("too much time on same track");
+            //Debug.Log("too much time on same track");
             currentTrackIndex = (currentTrackIndex + 1) % songSpawnData.CurrentSongSpawnData.Tracks.Count;
             timeElapsedOnSameTrack = 0.0f;
         }
