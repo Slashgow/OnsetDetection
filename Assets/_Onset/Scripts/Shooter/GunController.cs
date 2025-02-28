@@ -36,6 +36,9 @@ public class GunController : MonoBehaviour
     private Vector2 ScreenCenterPoint;
     public void Shoot(InputAction.CallbackContext context)
     {
+        if (GameManager.Instance.IsPaused)
+            return;
+
         if (context.performed)
         {
             ScreenCenterPoint = new Vector2(Screen.width / 2f , Screen.height / 2f);

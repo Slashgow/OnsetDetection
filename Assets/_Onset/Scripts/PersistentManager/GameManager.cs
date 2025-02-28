@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : PersistentMonoSingleton<GameManager>
 {
+    public bool IsPaused {  get; private set; }
     public bool IsInGame { get; private set; }
     public AudioClipData CurrentAudioClipData { get; set; }
 
@@ -26,13 +27,20 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 
     public void Pause()
     {
+        IsPaused = true;
         Time.timeScale = 0.0f;
         AudioListener.pause = true;
     }
 
     public void Resume()
     {
+        IsPaused=false;
         Time.timeScale = 1.0f;
         AudioListener.pause = false;
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

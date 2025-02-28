@@ -1,19 +1,21 @@
 using UnityEngine;
 public class SettingManager : PersistentMonoSingleton<SettingManager>
 {
-    [SerializeField, Range(0.3f,4f)]
+    [SerializeField, Range(0.05f,2f)]
     private float defaultMouseSensitivty;
 
-    [SerializeField, Range(0.3f, 4f)]
+    [SerializeField, Range(0.05f, 2f)]
     private float defaultAimSensitivty;
 
 
     public float CurrentMouseSensitivity { get; private set; }
     public float CurrentAimSensitivity { get; private set; }
-    public float CurrentSensitivity { get; private set; }
+    public float CurrentSensitivity => IsAiming ? CurrentAimSensitivity : CurrentMouseSensitivity;
 
     private const string MOUSE_SENSITIVITY_ID = "MOUSE_SENSITIVITY";
     private const string AIM_SENSITIVITY_ID = "AIM_SENSITIVITY";
+
+    public bool IsAiming {  get; private set; }
 
     protected override void Awake()
     {
@@ -35,9 +37,10 @@ public class SettingManager : PersistentMonoSingleton<SettingManager>
         SetMouseSensitivity(CurrentMouseSensitivity);
         SetAimSensitivity(CurrentAimSensitivity);
         SetSensitivity(false);
+        Debug.Log("Update Sensitivity");
     }
 
-    public void SetSensitivity(bool isAiming) => CurrentSensitivity = isAiming ? CurrentAimSensitivity : CurrentMouseSensitivity;
+    public void SetSensitivity(bool isAiming) => IsAiming = isAiming;
     public void SetMouseSensitivity(float value)
     {
         CurrentMouseSensitivity = value;

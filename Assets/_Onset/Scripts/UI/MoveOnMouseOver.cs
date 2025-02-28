@@ -26,7 +26,7 @@ public class MoveOnMouseOver : MonoBehaviour
 
     public void MoveHorizontally()
     {
-        Debug.Log("on mouse over");
+        //Debug.Log("on mouse over");
 
         if(moveTween != null)
             moveTween.Kill();
@@ -37,7 +37,7 @@ public class MoveOnMouseOver : MonoBehaviour
 
     public void ResetPosition()
     {
-        Debug.Log("on mouse exit");
+        //Debug.Log("on mouse exit");
         if (moveTween != null)
             moveTween.Kill();
         

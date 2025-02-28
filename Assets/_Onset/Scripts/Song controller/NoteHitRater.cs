@@ -9,6 +9,7 @@ public class NoteHitRater : MonoSingleton<NoteHitRater>
 
     public NoteHitClassification GetHitClassification(float timeReminingBeforeHit)
     {
+        //Debug.Log($"time remaining before hit {timeReminingBeforeHit}");
         foreach(NoteHitClassificationData hitClassificationData in noteHitClassificationDatas)
         {
             if(hitClassificationData.HitClassification != NoteHitClassification.MISS 

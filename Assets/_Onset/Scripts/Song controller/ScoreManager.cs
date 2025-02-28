@@ -70,7 +70,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
     private void NoteSpawner_OnNoteReachedHitPoint(NoteHitClassification noteHitClassification) => UpdateScore(noteHitClassification);
 
     private void IncreaseHit(NoteHitClassification hitClassification) => scoreData.ScoreClassifiedList.First(scoreClassified => scoreClassified.HitClassification == hitClassification).NumberOfHit++;
-
+   
     private void UpdateScore(NoteHitClassification noteHitClassification)
     {
         if (noteHitClassification == NoteHitClassification.MISS)
@@ -98,7 +98,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
                 scoreData.LastMultiplier = scoreData.CurrentMultiplier;
             }
 
-            scoreData.Score += scoreData.ScorePerHitBase * scoreData.CurrentMultiplier;
+            scoreData.Score += scoreData.GetScoreClassified(noteHitClassification).ScorePerHitClassified * scoreData.CurrentMultiplier;
             OnScoreUpdated?.Invoke(scoreData.Score, noteHitClassification);
         }
 

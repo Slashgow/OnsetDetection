@@ -68,7 +68,7 @@
                 {
                     "name": "",
                     "id": "16c60e53-57b4-4a96-a695-b242b3a65bad",
-                    "path": "<Pointer>/delta",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "InvertVector2(invertX=false),ScaleVector2(x=0.05,y=0.05)",
                     "groups": "KeyboardMouse",

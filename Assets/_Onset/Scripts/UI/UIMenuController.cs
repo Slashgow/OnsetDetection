@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIMenuController : MonoSingleton<UIMenuController>
 {
@@ -35,7 +36,9 @@ public class UIMenuController : MonoSingleton<UIMenuController>
     {
         if(menuType != MenuType.IN_GAME)
         {
-            GameManager.Instance.Pause();
+            if(GameManager.Instance.IsInGame)
+                GameManager.Instance.Pause();
+
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }

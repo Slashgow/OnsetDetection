@@ -10,6 +10,7 @@ public class SimplePlayerInput : MonoBehaviour
   
     public void OnLook(InputAction.CallbackContext context)
     {
+    
         LookInput(context.ReadValue<Vector2>());
     }
 #endif
@@ -18,5 +19,9 @@ public class SimplePlayerInput : MonoBehaviour
     {
         look = newLookDirection;
     }
-	
+
+    //private void Update()
+    //{
+    //    Debug.Log(look);
+    //}
 }
