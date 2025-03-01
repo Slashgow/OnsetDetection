@@ -13,10 +13,15 @@ public class ScoreManager : MonoSingleton<ScoreManager>
     [SerializeField]
     private ScoreData scoreData;
 
+    public int NumberOfNoteToStarPower => scoreData.NumberOfNoteToStarPower;
+
+    public event Action<int, int> OnNumberOfSuccessiveNoteUpdated;
     public event Action<int, NoteHitClassification> OnScoreUpdated;
     public event Action<int> OnMultiplierUpdated;
     public event Action<ScoreData> OnSongEnd;
+    public event Action OnUnlockedStarPower;
 
+    private bool isStarPowerUnlocked;
 
     private void Start()
     {
@@ -43,7 +48,13 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         if (scoreData.CurrentMultiplier != scoreData.LastMultiplier)
             OnMultiplierUpdated?.Invoke(scoreData.CurrentMultiplier);
 
-        scoreData.NumberOfSuccessiveNotes = 0;
+        if(scoreData.NumberOfSuccessiveNotes > 0)
+        {
+            scoreData.NumberOfSuccessiveNotes = 0;
+            scoreData.NumberOfSuccessiveNotesToStarPower = 0;
+            OnNumberOfSuccessiveNoteUpdated?.Invoke(scoreData.NumberOfSuccessiveNotes, scoreData.NumberOfSuccessiveNotesToStarPower);
+        }
+    
         scoreData.LastMultiplier = scoreData.CurrentMultiplier;
     }
 
@@ -80,12 +91,26 @@ public class ScoreManager : MonoSingleton<ScoreManager>
             if(scoreData.LastMultiplier != scoreData.CurrentMultiplier)
                 OnMultiplierUpdated?.Invoke(scoreData.CurrentMultiplier);
 
-            scoreData.NumberOfSuccessiveNotes = 0;
+            if (scoreData.NumberOfSuccessiveNotes > 0)
+            {
+                scoreData.NumberOfSuccessiveNotes = 0;
+                scoreData.NumberOfSuccessiveNotesToStarPower = 0;
+                OnNumberOfSuccessiveNoteUpdated?.Invoke(scoreData.NumberOfSuccessiveNotes, scoreData.NumberOfSuccessiveNotesToStarPower);
+            }
+    
             scoreData.LastMultiplier = scoreData.CurrentMultiplier;
+            OnScoreUpdated?.Invoke(scoreData.Score, noteHitClassification);
         }
         else
         {
             scoreData.NumberOfSuccessiveNotes++;
+            scoreData.NumberOfSuccessiveNotesToStarPower++;
+            OnNumberOfSuccessiveNoteUpdated?.Invoke(scoreData.NumberOfSuccessiveNotes, scoreData.NumberOfSuccessiveNotesToStarPower);
+            if(scoreData.NumberOfSuccessiveNotes >= NumberOfNoteToStarPower && !isStarPowerUnlocked)
+            {
+                Debug.Log("star power is unlocked");
+                OnUnlockedStarPower?.Invoke();
+            }
 
             if (scoreData.NumberOfSuccessiveNotes >= scoreData.NumberOfNoteToNextMultiplier * scoreData.CurrentMultiplier)
             {
@@ -105,6 +130,15 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         IncreaseHit(noteHitClassification);
         scoreData.TotalNumberOfNotes++;
       
+    }
+
+    public void UseStarPower()
+    {
+        Debug.Log("star power was used");
+        isStarPowerUnlocked = false;
+        scoreData.NumberOfSuccessiveNotesToStarPower = 0;
+        scoreData.CurrentMultiplier *= 2;
+        OnMultiplierUpdated?.Invoke(scoreData.CurrentMultiplier);
     }
 
 }

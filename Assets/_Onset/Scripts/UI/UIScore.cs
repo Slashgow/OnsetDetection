@@ -2,9 +2,16 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIScore : MonoBehaviour
 {
+    [SerializeField]
+    private TextMeshProUGUI textNumberOfHitScore;
+
+    [SerializeField]
+    private Slider startPowerSlider;
+
     [SerializeField]
     private TextMeshProUGUI textScore;
 
@@ -35,6 +42,9 @@ public class UIScore : MonoBehaviour
     private Sequence sequenceMultiplier;
     private Tween rotateTweenMultiplier;
 
+    private Sequence sequenceNumberOfHit;
+    private Tween rotateTweenNumberOfHit;
+
     private void Start()
     {
         ScoreManager.Instance.OnScoreUpdated -= ScoreManager_OnScoreUpdated;
@@ -43,20 +53,41 @@ public class UIScore : MonoBehaviour
         ScoreManager.Instance.OnMultiplierUpdated -= ScoreManager_OnMultiplierUpdated;
         ScoreManager.Instance.OnMultiplierUpdated += ScoreManager_OnMultiplierUpdated;
 
+        ScoreManager.Instance.OnNumberOfSuccessiveNoteUpdated -= ScoreManager_OnNumberOfSuccessiveNoteUpdated;
+        ScoreManager.Instance.OnNumberOfSuccessiveNoteUpdated += ScoreManager_OnNumberOfSuccessiveNoteUpdated;
+
         textScore.text = "0";
         textMutliplier.text = "X 1";
+        textNumberOfHitScore.text = "0";
+
+        textMutliplier.color = ColorManager.Instance.GetColorMultiplier(1);
+        textNumberOfHitScore.color = ColorManager.Instance.NumberOfHitColor;
+
+        startPowerSlider.minValue = 0;
+        startPowerSlider.maxValue = ScoreManager.Instance.NumberOfNoteToStarPower;
+        startPowerSlider.value = 0;
+    }
+
+    private void ScoreManager_OnNumberOfSuccessiveNoteUpdated(int numberOfSuccessiveNote, int numberOfSuccessiveNoteToStarPower)
+    {
+        startPowerSlider.value = Mathf.Clamp(numberOfSuccessiveNoteToStarPower, 0, ScoreManager.Instance.NumberOfNoteToStarPower);
+        textNumberOfHitScore.text = numberOfSuccessiveNote.ToString();
+        AnimateNumberOfHit();
     }
 
     private void ScoreManager_OnMultiplierUpdated(int multiplier)
     {
         textMutliplier.text = $"X {multiplier}";
+        textMutliplier.color = ColorManager.Instance.GetColorMultiplier(multiplier);
         AnimateMultiplier();
     }
 
     private void ScoreManager_OnScoreUpdated(int score, NoteHitClassification noteHitClassification)
     {
         textScore.text = score.ToString();
+
         textClassification.text = noteHitClassification.ToString();
+        textClassification.color = ColorManager.Instance.GetColorRated(noteHitClassification);
 
         AnimateScore();
         AnimateClassification();
@@ -104,6 +135,21 @@ public class UIScore : MonoBehaviour
         sequenceMultiplier.Append(textMutliplier.transform.DOScale(1, duration).SetEase(easing));
 
         rotateTweenMultiplier = textMutliplier.transform.DOLocalRotate(new Vector3(0f, 0f, UnityEngine.Random.Range(0, maxZRotation)), duration).SetEase(easing).OnComplete(() => transform.DORewind());
+    }
+
+    private void AnimateNumberOfHit()
+    {
+        if (sequenceNumberOfHit != null)
+            sequenceMultiplier.Kill();
+
+        if (rotateTweenNumberOfHit != null)
+            rotateTweenMultiplier.Kill();
+
+        sequenceNumberOfHit = DOTween.Sequence();
+        sequenceNumberOfHit.Append(textNumberOfHitScore.transform.DOScale(maxScale, duration).SetEase(easing));
+        sequenceNumberOfHit.Append(textNumberOfHitScore.transform.DOScale(1, duration).SetEase(easing));
+
+        rotateTweenNumberOfHit = textNumberOfHitScore.transform.DOLocalRotate(new Vector3(0f, 0f, UnityEngine.Random.Range(0, maxZRotation)), duration).SetEase(easing).OnComplete(() => transform.DORewind());
     }
 
 }

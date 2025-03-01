@@ -629,6 +629,7 @@ GameObject:
   - component: {fileID: 1772559138}
   - component: {fileID: 1772559139}
   - component: {fileID: 1772559140}
+  - component: {fileID: 1772559141}
   m_Layer: 0
   m_Name: GAME MANAGER
   m_TagString: Untagged
@@ -706,6 +707,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultDifficulty: 0
+--- !u!114 &1772559141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772559135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5ac6c5bbf838b74fb22cb0b987c46f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  excellentColor: {r: 0.48627454, g: 0.019607844, b: 0.9490197, a: 1}
+  greatColor: {r: 0.6509804, g: 0.14901961, b: 0.47450984, a: 1}
+  earlyColor: {r: 0.9490197, g: 0.454902, b: 0.019607844, a: 1}
+  lateColor: {r: 0.29803923, g: 0.019607844, b: 0.5764706, a: 1}
+  missColor: {r: 0.9490196, g: 0.22261114, b: 0.01960786, a: 1}
+  x1Color: {r: 0.9490197, g: 0.454902, b: 0.019607844, a: 1}
+  x2Color: {r: 0.6509804, g: 0.14901961, b: 0.47450984, a: 1}
+  x3Color: {r: 0.48627454, g: 0.019607844, b: 0.9490197, a: 1}
+  x4Color: {r: 0.29841045, g: 0.019001435, b: 0.5754717, a: 1}
+  x6Color: {r: 0, g: 0.60258484, b: 1, a: 1}
+  x8Color: {r: 0, g: 0.9098039, b: 1, a: 1}
+  numberOfHitColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &1782471103
 PrefabInstance:
   m_ObjectHideFlags: 0

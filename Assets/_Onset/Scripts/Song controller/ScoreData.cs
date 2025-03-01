@@ -22,6 +22,8 @@ public class ScoreData
     public int Score { get; set; }
     public int CurrentMultiplier { get; set; }
     public int NumberOfSuccessiveNotes { get; set; }
+    public int NumberOfSuccessiveNotesToStarPower { get; set; }
+    public int NumberOfNoteToStarPower => NumberOfNoteToNextMultiplier * (4 - 1);
     public float PercentageOfNoteHit
     {
         get
