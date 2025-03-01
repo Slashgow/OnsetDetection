@@ -21,7 +21,11 @@ public class SongLoader : MonoBehaviour
 
     private void Start()
     {
-        LoadAudioAsync(SaveDataPaths.GetAbsolutePathAudioClip(GameManager.Instance.CurrentAudioClipData));
+        string audioClipPath = GameManager.Instance.CurrentAudioClipData.IsCampaign ?
+                SaveDataPaths.GetAbsolutePathAudioClipCampaign(GameManager.Instance.CurrentAudioClipData) :
+                GameManager.Instance.CurrentAudioClipData.AudioClipPath;
+
+        LoadAudioAsync(audioClipPath);
     }
 
     private void LoadAudioAsync(string path)
@@ -42,7 +46,9 @@ public class SongLoader : MonoBehaviour
     {
         if (!useFrequencyDomainClassification)
         {
-            string filePath = SaveDataPaths.GetAbsolutePathSongMap(GameManager.Instance.CurrentAudioClipData); 
+            string filePath = GameManager.Instance.CurrentAudioClipData.IsCampaign ? 
+                SaveDataPaths.GetAbsolutePathSongMapCampaign(GameManager.Instance.CurrentAudioClipData) :
+                SaveDataPaths.GetAbsolutePathSongMapImported(GameManager.Instance.CurrentAudioClipData); 
      
 
             if (!System.IO.File.Exists(filePath))

@@ -48,14 +48,27 @@ public class UIMenuSongLoader : MonoBehaviour
         //Debug.Log(Application.dataPath);
         //Debug.Log(SaveSongFolderURL.SaveSongAbsoluteFolderURL);
 
-        List<string> filesPathsCredits = Directory.GetFiles(SaveDataPaths.SaveSongAbsoluteFolderPath, "*_credit.json").ToList();
-        filesPathsCredits.ForEach(filePath => fileNames.Add(Path.GetFullPath(filePath)));
+        List<string> filesPathsCreditsCampaign = Directory.GetFiles(SaveDataPaths.SongMapsCampaignAbsoluteFolderPath, "*_credit.json").ToList();
+        filesPathsCreditsCampaign.ForEach(filePath => fileNames.Add(Path.GetFullPath(filePath)));
 
-        foreach (string filePath in filesPathsCredits)
+        foreach (string filePath in filesPathsCreditsCampaign)
         {
             string audioClipDataText = System.IO.File.ReadAllText(filePath);
             AudioClipData  audioClipData = JsonUtility.FromJson<AudioClipData>(audioClipDataText);
             audioClipDatas.Add(audioClipData);
+        }
+
+        List<string> filesPathsCreditsImported = Directory.GetFiles(SaveDataPaths.SongMapsImportedAbsoluteFolderPath, "*_credit.json").ToList();
+        filesPathsCreditsCampaign.ForEach(filePath => fileNames.Add(Path.GetFullPath(filePath)));
+        foreach (string filePath in filesPathsCreditsImported)
+        {
+            string audioClipDataText = System.IO.File.ReadAllText(filePath);
+            AudioClipData audioClipData = JsonUtility.FromJson<AudioClipData>(audioClipDataText);
+
+            if (File.Exists(audioClipData.AudioClipPath))
+                audioClipDatas.Add(audioClipData);
+            else
+                Debug.Log("Couldn't find associated music file");
         }
     }
 

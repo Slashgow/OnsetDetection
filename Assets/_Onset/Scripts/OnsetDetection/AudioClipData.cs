@@ -5,6 +5,14 @@ using UnityEngine;
 public class AudioClipData 
 {
     [SerializeField]
+    private string audioClipPath;
+    public string AudioClipPath => audioClipPath;
+
+    [SerializeField]
+    private bool isCampaign;
+    public bool IsCampaign => isCampaign;
+
+    [SerializeField]
     private string songTitle;
     public string SongTitle => songTitle;
 
@@ -16,10 +24,12 @@ public class AudioClipData
     private string extension;
     public string Extension => extension;
 
-    public AudioClipData(string songTitle, string author, string extension)
+    public AudioClipData(string songTitle, string author, string extension, string audioClipPath, bool isCampaign)
     {
         this.songTitle = songTitle;
         this.author = author;
         this.extension = extension;
+        this.audioClipPath = audioClipPath;
+        this.isCampaign = isCampaign;
     }
 }

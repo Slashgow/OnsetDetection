@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using System.Threading;
 using System.Collections.Generic;
+using System.IO;
 
 public class PreProcessAudioData : MonoBehaviour
 {
@@ -190,8 +191,14 @@ public class PreProcessAudioData : MonoBehaviour
             string songData = JsonUtility.ToJson(this.OnsetDetection);
             string creditsData = JsonUtility.ToJson(this.audioClipMapper.AudioClipData);
 
-            string filePathMap = SaveDataPaths.GetAbsolutePathSongMap(audioClipMapper.AudioClipData);
-            string filePathCredits = SaveDataPaths.GetAbsolutePathSongCredits(audioClipMapper.AudioClipData);
+            string filePathMap = audioClipMapper.AudioClipData.IsCampaign ?  
+                SaveDataPaths.GetAbsolutePathSongMapCampaign(audioClipMapper.AudioClipData) : 
+                SaveDataPaths.GetAbsolutePathSongMapImported(audioClipMapper.AudioClipData);
+
+            string filePathCredits = audioClipMapper.AudioClipData.IsCampaign ? 
+                SaveDataPaths.GetAbsolutePathSongCreditsCampaign(audioClipMapper.AudioClipData) :
+                SaveDataPaths.GetAbsolutePathSongCreditsImported(audioClipMapper.AudioClipData);
+            
             Debug.Log(filePathMap);
 
             if (System.IO.File.Exists(filePathMap))
@@ -200,6 +207,10 @@ public class PreProcessAudioData : MonoBehaviour
             if (System.IO.File.Exists(filePathCredits))
                 System.IO.File.Delete(filePathCredits);
 
+            if (!Directory.Exists(SaveDataPaths.SongMapsImportedAbsoluteFolderPath))
+            {
+                Directory.CreateDirectory(SaveDataPaths.SongMapsImportedAbsoluteFolderPath);
+            }
 
             System.IO.File.WriteAllText(filePathCredits, creditsData);
             System.IO.File.WriteAllText(filePathMap, songData);

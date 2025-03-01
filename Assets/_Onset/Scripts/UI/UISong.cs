@@ -53,12 +53,16 @@ public class UISong : MonoBehaviour
 
     public void PlayMusic()
     {
-        Debug.Log(SaveDataPaths.GetAbsolutePathAudioClip(audioClipData));
+        Debug.Log(audioClipData.AudioClipPath);
         
 
         if(audioClip == null)
         {
-            StartCoroutine(SongImporter.Instance.LoadAudioClip(SaveDataPaths.GetAbsolutePathAudioClip(audioClipData)));
+            string audioClipPath = audioClipData.IsCampaign ?
+                SaveDataPaths.GetAbsolutePathAudioClipCampaign(audioClipData) :
+                audioClipData.AudioClipPath;
+
+            StartCoroutine(SongImporter.Instance.LoadAudioClip(audioClipPath));
             SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
             SongImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
         }

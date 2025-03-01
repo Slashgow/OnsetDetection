@@ -138,6 +138,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         isStarPowerUnlocked = false;
         scoreData.NumberOfSuccessiveNotesToStarPower = 0;
         scoreData.CurrentMultiplier *= 2;
+        scoreData.LastMultiplier = scoreData.CurrentMultiplier;
         OnMultiplierUpdated?.Invoke(scoreData.CurrentMultiplier);
     }
 

@@ -26,6 +26,9 @@ public class UIMenuSongImporter : MonoBehaviour
     [SerializeField]
     private string missingInfo, completed, generating;
 
+    [SerializeField]
+    private bool debugIsCampaign;
+
     private AudioClipData audioClipData;    
 
     private void Awake()
@@ -61,15 +64,20 @@ public class UIMenuSongImporter : MonoBehaviour
     private void GenerateTrack()
     {
         
-        if(!string.IsNullOrEmpty(authorInputField.text) && !string.IsNullOrEmpty(songInputField.text))
+        if(!string.IsNullOrEmpty(authorInputField.text) && !string.IsNullOrEmpty(songInputField.text) && SongImporter.Instance.AudioClip != null)
         {
             generateTrackButton.interactable = false;
             statusGenerationText.text = generating;
-            audioClipData = new AudioClipData(songInputField.text, authorInputField.text, SongImporter.Instance.Extension);
+
+#if UNITY_EDITOR
+            audioClipData = new AudioClipData(songInputField.text, authorInputField.text, SongImporter.Instance.Extension, SongImporter.Instance.CurrentFilePath, debugIsCampaign);
+#else
+            audioClipData = new AudioClipData(songInputField.text, authorInputField.text, SongImporter.Instance.Extension, SongImporter.Instance.CurrentFilePath, false);
+#endif
             preProcessAudioData.audioClipMapper = new AudioClipMapper(SongImporter.Instance.AudioClip, audioClipData);
             preProcessAudioData.GenerateTrack();
 
-            SongImporter.Instance.CopyImportedFile(SongImporter.Instance.CurrentFilePath, SaveDataPaths.AbsolutePathAudioClipDirectory, SaveDataPaths.GetFileName(audioClipData));
+            //SongImporter.Instance.CopyImportedFile(SongImporter.Instance.CurrentFilePath, SaveDataPaths.AudioClipCampaignAbsoluteFolderPath, SaveDataPaths.GetFileName(audioClipData));
         }
         else
         {
