@@ -65,10 +65,10 @@ public class UIMenuSongLoader : MonoBehaviour
             string audioClipDataText = System.IO.File.ReadAllText(filePath);
             AudioClipData audioClipData = JsonUtility.FromJson<AudioClipData>(audioClipDataText);
 
-            if (File.Exists(audioClipData.AudioClipPath))
-                audioClipDatas.Add(audioClipData);
-            else
-                Debug.Log("Couldn't find associated music file");
+            //if (File.Exists(audioClipData.AudioClipPath))
+            audioClipDatas.Add(audioClipData);
+            //else
+            //    Debug.Log("Couldn't find associated music file");
         }
     }
 
@@ -80,7 +80,7 @@ public class UIMenuSongLoader : MonoBehaviour
         {
             GameObject uiSongGroupGameObjectInstance = Instantiate(UISongGroupPrefab, content.transform);
             UISong uiSong = uiSongGroupGameObjectInstance.GetComponent<UISong>();
-            uiSong.UpdateSongTitle(audioClipData);
+            uiSong.UpdateSongInfo(audioClipData);
             uiSong.AudioSource = audioSource;
 
             uiSong.OnIsSelected -= UiSong_OnIsSelected;

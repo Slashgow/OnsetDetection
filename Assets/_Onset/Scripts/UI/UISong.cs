@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class UISong : MonoBehaviour
@@ -13,14 +13,19 @@ public class UISong : MonoBehaviour
     private TextMeshProUGUI songAuthor;
 
     [SerializeField]
+    private TextMeshProUGUI highScore;
+
+    [SerializeField]
     private Toggle toggle;
     public Toggle Toggle => toggle;
 
     public AudioSource AudioSource { get; set; }
     private AudioClipData audioClipData;
+    public AudioClipData AudioClipData => audioClipData;
     private AudioClip audioClip;
 
     public event Action<AudioClipData> OnIsSelected;
+    public event Action OnAudioClipPathNotValid;
 
     private void OnEnable() => toggle.onValueChanged.AddListener(ToggleMusic);
     private void OnDisable() => toggle.onValueChanged.RemoveListener(ToggleMusic);
@@ -36,11 +41,15 @@ public class UISong : MonoBehaviour
             StopMusic();
     }
 
-    public void UpdateSongTitle(AudioClipData audioClipData)
+    public void UpdateSongInfo(AudioClipData audioClipData)
     {
         this.audioClipData = audioClipData;
         songTitle.text = this.audioClipData.SongTitle;
         songAuthor.text = this.audioClipData.Author;
+        highScore.text = SaveDataPaths.GetHighScore(audioClipData).ToString();
+
+        if (!audioClipData.IsCampaign && !File.Exists(audioClipData.AudioClipPath))
+            OnAudioClipPathNotValid?.Invoke();
     }
 
     public void StopMusic()
@@ -79,5 +88,11 @@ public class UISong : MonoBehaviour
         audioClip = SongImporter.Instance.AudioClip;
         AudioSource.clip = audioClip;
         AudioSource.Play();
+    }
+
+    public void UpdateAudioClipData(AudioClipData audioClipData)
+    {
+        this.audioClipData = audioClipData;
+        OnIsSelected?.Invoke(audioClipData);
     }
 }

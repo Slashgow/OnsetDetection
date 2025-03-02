@@ -11,9 +11,10 @@ public class SongImporter : MonoSingleton<SongImporter>
     public string Extension { get; private set; }
 
     public event Action OnEndImportAudioClip;
+    public event Action OnFailImportAudioClip;
     public string CurrentFilePath { get; private set; }
 
-    public void OpenFileBrowser()
+    public void OpenFileBrowser(bool showImportSongMenu)
     {
         var bp = new BrowserProperties();
         bp.filter = "Music Files (*.mp3, *.wav, *.ogg) | *.mp3; *.wav; *.ogg";
@@ -25,8 +26,8 @@ public class SongImporter : MonoSingleton<SongImporter>
             StartCoroutine(LoadAudioClip(path));
         });
 
-
-        UIMenuController.Instance.ShowOnly(MenuType.IMPORT_SONG);
+        if(showImportSongMenu )
+            UIMenuController.Instance.ShowOnly(MenuType.IMPORT_SONG);
     }
 
     public IEnumerator LoadAudioClip(string path)
@@ -47,8 +48,9 @@ public class SongImporter : MonoSingleton<SongImporter>
         {
             yield return uwr.SendWebRequest();
 
-            if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.DataProcessingError)
+            if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.DataProcessingError || uwr.result == UnityWebRequest.Result.ProtocolError)
             {
+                OnFailImportAudioClip?.Invoke();
                 Debug.Log(uwr.error);
             }
             else
