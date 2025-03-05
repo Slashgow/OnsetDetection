@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[SerializeField]
+public class SongSpawnDataCircle : SongSpawnData
+{
+    [SerializeField]
+    private float timeToHit;
+    public override float TimeToHitFirstTrack => timeToHit;
+}
+
+
 [Serializable]
 public class SongSpawnData
 {
@@ -15,8 +24,8 @@ public class SongSpawnData
 
     public SongSpawnDataByDifficulty GetSongSpawnDataByDifficulty(Difficulty difficulty) => spawnDataByDifficultyList.First(spawnData =>  spawnData.Difficulty == difficulty);
 
-    private float timeToHitFirstTrack;
-    public float TimeToHitFirstTrack => timeToHitFirstTrack;
+    protected float timeToHitFirstTrack;
+    public virtual float TimeToHitFirstTrack => timeToHitFirstTrack;
 
     private SongSpawnDataByDifficulty currentSongSpawnData;
     public SongSpawnDataByDifficulty CurrentSongSpawnData => currentSongSpawnData;

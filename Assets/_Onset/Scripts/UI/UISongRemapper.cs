@@ -10,12 +10,15 @@ public class UISongRemapper : MonoBehaviour
     [SerializeField]
     private Button remapButton;
 
-
+    private void Awake()
+    {
+        remapButton.interactable = false;
+        Debug.Log("set remap button to not interactable");
+    }
     private void OnEnable()
     {
         uiSong.OnAudioClipPathNotValid += UiSong_OnAudioClipPathNotValid;
         remapButton.onClick.AddListener(Remap);
-        remapButton.interactable = false;
     }
     private void OnDisable()
     {
@@ -25,18 +28,22 @@ public class UISongRemapper : MonoBehaviour
 
     private void Remap()
     {
-        SongImporter.Instance.OpenFileBrowser(false);
+        AudioClipImporter.Instance.OpenFileBrowser(false);
 
-        SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
-        SongImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
+        AudioClipImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
+        AudioClipImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
     }
-    private void UiSong_OnAudioClipPathNotValid() => remapButton.interactable = true;
+    private void UiSong_OnAudioClipPathNotValid()
+    {
+        Debug.Log("on receive path doest not exist");
+        remapButton.interactable = true;
+    }
 
     private void SongImporter_OnEndImportAudioClip()
     {
 
         AudioClipData audioClipDataValidPath = new AudioClipData(uiSong.AudioClipData.SongTitle, uiSong.AudioClipData.Author,
-            uiSong.AudioClipData.Extension, SongImporter.Instance.CurrentFilePath, uiSong.AudioClipData.IsCampaign);
+            uiSong.AudioClipData.Extension, AudioClipImporter.Instance.CurrentFilePath, uiSong.AudioClipData.IsCampaign);
 
         SaveNewPathToJSON(audioClipDataValidPath);
         UpdateUISongAudioClipData(audioClipDataValidPath);

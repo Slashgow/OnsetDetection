@@ -30,14 +30,14 @@ public class SongLoader : MonoBehaviour
 
     private void LoadAudioAsync(string path)
     {
-        StartCoroutine(SongImporter.Instance.LoadAudioClip(path));
-        SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
-        SongImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
+        StartCoroutine(AudioClipImporter.Instance.LoadAudioClip(path));
+        AudioClipImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
+        AudioClipImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
     }
 
     private void SongImporter_OnEndImportAudioClip()
     {
-        audioClip = SongImporter.Instance.AudioClip;
+        audioClip = AudioClipImporter.Instance.AudioClip;
         sampleRate = audioClip.frequency;
         LoadSongDataFromJson();
     }

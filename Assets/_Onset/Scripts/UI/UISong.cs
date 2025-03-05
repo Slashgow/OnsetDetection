@@ -49,7 +49,12 @@ public class UISong : MonoBehaviour
         highScore.text = SaveDataPaths.GetHighScore(audioClipData).ToString();
 
         if (!audioClipData.IsCampaign && !File.Exists(audioClipData.AudioClipPath))
+        {
+            Debug.Log("File does not exist");
             OnAudioClipPathNotValid?.Invoke();
+            
+        }
+            
     }
 
     public void StopMusic()
@@ -57,7 +62,7 @@ public class UISong : MonoBehaviour
         if(audioClip != null && AudioSource.clip == audioClip)
             AudioSource.Stop();
 
-        SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
+        AudioClipImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
     }
 
     public void PlayMusic()
@@ -71,9 +76,9 @@ public class UISong : MonoBehaviour
                 SaveDataPaths.GetAbsolutePathAudioClipCampaign(audioClipData) :
                 audioClipData.AudioClipPath;
 
-            StartCoroutine(SongImporter.Instance.LoadAudioClip(audioClipPath));
-            SongImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
-            SongImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
+            StartCoroutine(AudioClipImporter.Instance.LoadAudioClip(audioClipPath));
+            AudioClipImporter.Instance.OnEndImportAudioClip -= SongImporter_OnEndImportAudioClip;
+            AudioClipImporter.Instance.OnEndImportAudioClip += SongImporter_OnEndImportAudioClip;
         }
         else
         {
@@ -85,7 +90,7 @@ public class UISong : MonoBehaviour
     private void SongImporter_OnEndImportAudioClip()
     {
         Debug.Log("on import audio clip end");
-        audioClip = SongImporter.Instance.AudioClip;
+        audioClip = AudioClipImporter.Instance.AudioClip;
         AudioSource.clip = audioClip;
         AudioSource.Play();
     }

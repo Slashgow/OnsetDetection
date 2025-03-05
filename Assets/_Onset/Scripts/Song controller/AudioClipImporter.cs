@@ -5,7 +5,7 @@ using AnotherFileBrowser.Windows;
 using System.IO;
 using System;
 
-public class SongImporter : MonoSingleton<SongImporter>
+public class AudioClipImporter : MonoSingleton<AudioClipImporter>
 {
     public AudioClip AudioClip { get; private set; }
     public string Extension { get; private set; }

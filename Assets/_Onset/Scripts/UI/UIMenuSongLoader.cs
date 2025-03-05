@@ -30,6 +30,7 @@ public class UIMenuSongLoader : MonoBehaviour
         audioSource.ignoreListenerPause = true;
         SetAllAudioClipData();
         LoadUI();
+        startButton.interactable = false;
         startButton.onClick.AddListener(LoadScene);
     }
 
@@ -94,6 +95,7 @@ public class UIMenuSongLoader : MonoBehaviour
 
     private void UiSong_OnIsSelected(AudioClipData audioClipData)
     {
+        startButton.interactable = true;
         GameManager.Instance.CurrentAudioClipData = audioClipData;
     }
 }

@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MenuTable_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: b4ba291094a4a824e902eef64a68cb13, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 78670852096
+    m_Localized: Campaign
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14534750629888
+    m_Localized: Browse songs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14930831339520
+    m_Localized: Import song
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15054106128384
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15107872911360
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15270427357184
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15371438780416
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15985874956288
+    m_Localized: Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16166410383360
+    m_Localized: Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16370563936256
+    m_Localized: Song Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16820352708608
+    m_Localized: Generate Track
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17207310807040
+    m_Localized: Main volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17596349280256
+    m_Localized: Music Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17902843850752
+    m_Localized: SFX Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18045513101312
+    m_Localized: Mouse Sensitivity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18202208104448
+    m_Localized: Aim Sensitivity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18383280402432
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18733798387712
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18939818405888
+    m_Localized: Main Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19053953806336
+    m_Localized: Restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19395965743104
+    m_Localized: Score
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19455319339008
+    m_Localized: Highest Score
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19596197621760
+    m_Localized: Percentage of note hit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21525086728192
+    m_Localized: Enter Artist
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21643538067456
+    m_Localized: Enter Song title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38615462047744
+    m_Localized: Beginner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38686442254336
+    m_Localized: Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38778448506880
+    m_Localized: Hard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38845775474688
+    m_Localized: Extreme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 42967891308544
+    m_Localized: Remap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43379180564480
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43429554155520
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43471866294272
+    m_Localized: Are you sure you want to delete this track ?
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

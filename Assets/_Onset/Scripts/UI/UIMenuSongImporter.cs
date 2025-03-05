@@ -64,17 +64,17 @@ public class UIMenuSongImporter : MonoBehaviour
     private void GenerateTrack()
     {
         
-        if(!string.IsNullOrEmpty(authorInputField.text) && !string.IsNullOrEmpty(songInputField.text) && SongImporter.Instance.AudioClip != null)
+        if(!string.IsNullOrEmpty(authorInputField.text) && !string.IsNullOrEmpty(songInputField.text) && AudioClipImporter.Instance.AudioClip != null)
         {
             generateTrackButton.interactable = false;
             statusGenerationText.text = generating;
 
 #if UNITY_EDITOR
-            audioClipData = new AudioClipData(songInputField.text, authorInputField.text, SongImporter.Instance.Extension, SongImporter.Instance.CurrentFilePath, debugIsCampaign);
+            audioClipData = new AudioClipData(songInputField.text, authorInputField.text, AudioClipImporter.Instance.Extension, AudioClipImporter.Instance.CurrentFilePath, debugIsCampaign);
 #else
-            audioClipData = new AudioClipData(songInputField.text, authorInputField.text, SongImporter.Instance.Extension, SongImporter.Instance.CurrentFilePath, false);
+            audioClipData = new AudioClipData(songInputField.text, authorInputField.text, AudioClipImporter.Instance.Extension, AudioClipImporter.Instance.CurrentFilePath, false);
 #endif
-            preProcessAudioData.audioClipMapper = new AudioClipMapper(SongImporter.Instance.AudioClip, audioClipData);
+            preProcessAudioData.audioClipMapper = new AudioClipMapper(AudioClipImporter.Instance.AudioClip, audioClipData);
             preProcessAudioData.GenerateTrack();
 
             //SongImporter.Instance.CopyImportedFile(SongImporter.Instance.CurrentFilePath, SaveDataPaths.AudioClipCampaignAbsoluteFolderPath, SaveDataPaths.GetFileName(audioClipData));

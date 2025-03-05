@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MenuTable Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: MenuTable
+  m_TableCollectionNameGuidString: b4ba291094a4a824e902eef64a68cb13
+  m_Entries:
+  - m_Id: 18202208104448
+    m_Key: AimSensitivityID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16166410383360
+    m_Key: AuthorID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15371438780416
+    m_Key: BackID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 78670852096
+    m_Key: CampaignID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14534750629888
+    m_Key: ChooseSongID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15054106128384
+    m_Key: CreditID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16820352708608
+    m_Key: GenerateTrackID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19455319339008
+    m_Key: HighestScoreID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14930831339520
+    m_Key: ImportSongID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18383280402432
+    m_Key: LanguageID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18939818405888
+    m_Key: MainMenuID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17207310807040
+    m_Key: MainVolumeID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18045513101312
+    m_Key: MouseSensitivityID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17596349280256
+    m_Key: MusicVolumeID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19596197621760
+    m_Key: PercentNoteHitID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15107872911360
+    m_Key: OptionsID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15270427357184
+    m_Key: QuitID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19053953806336
+    m_Key: RestartID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18733798387712
+    m_Key: ResumeID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19395965743104
+    m_Key: ScoreID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17902843850752
+    m_Key: SFXVolumeID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16370563936256
+    m_Key: SongTitleID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15985874956288
+    m_Key: StartID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21525086728192
+    m_Key: EnterArtistID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21643538067456
+    m_Key: EnterSongTitleID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38615462047744
+    m_Key: BeginnerID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38686442254336
+    m_Key: MediumID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38778448506880
+    m_Key: HardID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38845775474688
+    m_Key: ExtremeID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 42967891308544
+    m_Key: RemapID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43379180564480
+    m_Key: YesID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43429554155520
+    m_Key: NoID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43471866294272
+    m_Key: DeleteWarningID
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items:
+    - rid: 6353381760484770086
+  m_KeyGenerator:
+    rid: 6353381760484770085
+  references:
+    version: 2
+    RefIds:
+    - rid: 6353381760484770085
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1740915429160
+    - rid: 6353381760484770086
+      type: {class: PreloadAssetTableMetadata, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_PreloadBehaviour: 1
