@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class SongNoteSpawner : MonoBehaviour
+public abstract class SongNoteSpawner : MonoBehaviour
 {
     [SerializeField]
-    private SongSpawnData songSpawnData;
+    protected SongSpawnData songSpawnData;
 
     [SerializeField]
     private SongLoader songLoader;
@@ -14,31 +12,28 @@ public class SongNoteSpawner : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
-    [SerializeField]
-    private List<TransFormByFrequencyDomain> transformByFrequencyDomains;
-
     public event Action<NoteHitClassification> OnMissNoteReachedHitPoint;
     public event Action OnSongEnd;
 
     public float timeElapsed = 0.0f;
     private int lastIndex = 0;
     private bool hasStarted = false;
-    private int currentTrackIndex = 0;
+    protected int currentTrackIndex = 0;
     private int lastPeakIndex;
 
 
-    private double timeToHitAudioSettings;
+    protected double timeToHitAudioSettings;
     private bool isAudioScheduled = false;
     private bool hasEnded;
 
     private float timeElapsedOnSameTrack = 0.0f;
     private bool startTrackingTimeOnTrack = false;
 
-    private void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
+    protected virtual void Awake() => songLoader.OnFinishLoadingSong += SongLoader_OnFinishLoadingSong;
     private void Start() => songSpawnData.Initialize();
 
     private void OnDestroy() => songLoader.OnFinishLoadingSong -= SongLoader_OnFinishLoadingSong;
-    private void SongLoader_OnFinishLoadingSong()
+    protected virtual void SongLoader_OnFinishLoadingSong()
     {
         audioSource.clip = songLoader.AudioClip;
         audioSource.clip.LoadAudioData();
@@ -48,14 +43,13 @@ public class SongNoteSpawner : MonoBehaviour
 
     }
 
-    private Transform GetTransformByDomain(FrequencyDomain domain) => transformByFrequencyDomains.First(transFormByFrequencyDomain => transFormByFrequencyDomain.Domain == domain).Transform;
-
     private void Update()
     {
         if (hasStarted && !hasEnded && timeElapsed >= audioSource.clip.length + songSpawnData.TimeToHitFirstTrack)
         {
             Debug.Log("on song end");
             OnSongEnd?.Invoke();
+            GameManager.Instance.SongEnd();
             hasEnded = true;
         }
 
@@ -123,14 +117,10 @@ public class SongNoteSpawner : MonoBehaviour
        
     }
 
-    private void SpawnNote()
+    protected virtual void SpawnNote()
     {
         GameObject noteGameObjectInstance = songSpawnData.NotePool.GetPrefabFromPool();
 
-        TrackFollower trackFollowerInstance = noteGameObjectInstance.GetComponent<TrackFollower>();
-        float noteSpeed = currentTrackIndex == 0 ? songSpawnData.CurrentSongSpawnData.NoteSpeed : songSpawnData.GetSpeedToMatchFirstTrack(songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex]); 
-        trackFollowerInstance.Setup(songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex].PathCreatorToHitNote, songSpawnData.CurrentSongSpawnData.Tracks[currentTrackIndex].PathCreatorFromHitNoteToPlanet, noteSpeed);
-        
         Note noteInstance = noteGameObjectInstance.GetComponent<Note>();
         noteInstance.OnMissNote -= NoteInstance_OnMissHitPoint;
         noteInstance.OnMissNote += NoteInstance_OnMissHitPoint;
@@ -138,7 +128,7 @@ public class SongNoteSpawner : MonoBehaviour
 
     }
 
-    private void NoteInstance_OnMissHitPoint(NoteHitClassification noteHitClassification)
+    protected void NoteInstance_OnMissHitPoint(NoteHitClassification noteHitClassification)
     {
         OnMissNoteReachedHitPoint?.Invoke(noteHitClassification);
     }

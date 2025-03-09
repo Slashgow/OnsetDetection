@@ -189,7 +189,9 @@ public class PreProcessAudioData : MonoBehaviour
         if (!useFrequencyDomainClassification)
         {
             string songData = JsonUtility.ToJson(this.OnsetDetection);
-            string creditsData = JsonUtility.ToJson(this.audioClipMapper.AudioClipData);
+            string creditsData = audioClipMapper.AudioClipData.IsCampaign ? 
+                JsonUtility.ToJson((AudioClipDataCampaign)this.audioClipMapper.AudioClipData) :
+                JsonUtility.ToJson(this.audioClipMapper.AudioClipData);
 
             string filePathMap = audioClipMapper.AudioClipData.IsCampaign ?  
                 SaveDataPaths.GetAbsolutePathSongMapCampaign(audioClipMapper.AudioClipData) : 

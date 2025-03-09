@@ -41,7 +41,7 @@ public class UISong : MonoBehaviour
             StopMusic();
     }
 
-    public void UpdateSongInfo(AudioClipData audioClipData)
+    public virtual void UpdateSongInfo(AudioClipData audioClipData)
     {
         this.audioClipData = audioClipData;
         songTitle.text = this.audioClipData.SongTitle;

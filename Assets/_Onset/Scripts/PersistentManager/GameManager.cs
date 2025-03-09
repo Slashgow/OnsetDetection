@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +7,9 @@ public class GameManager : PersistentMonoSingleton<GameManager>
     public bool IsPaused {  get; private set; }
     public bool IsInGame { get; private set; }
     public AudioClipData CurrentAudioClipData { get; set; }
+
+    public event Action OnSongEnd;
+    public event Action OnTotalScoreUpdated;
 
     private void Start()
     {
@@ -43,4 +47,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
     {
         Application.Quit();
     }
+
+    public void SongEnd() => OnSongEnd?.Invoke();
+    public void UpdateTotalScore() => OnTotalScoreUpdated?.Invoke();
 }

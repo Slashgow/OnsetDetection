@@ -60,21 +60,20 @@ public class AudioClipImporter : MonoSingleton<AudioClipImporter>
                 OnEndImportAudioClip?.Invoke();
             }
         }
-
     }
 
-    //public void CopyImportedFile(string currentFilePath, string copyDirectoryPath, string fileName)
-    //{
-    //    try
-    //    {
-    //        // Will not overwrite if the destination file already exists.
-    //        File.Copy(currentFilePath, Path.Combine(copyDirectoryPath, fileName ));
-    //    }
-    //
-    //    // Catch exception if the file was already copied.
-    //    catch (IOException copyError)
-    //    {
-    //        Console.WriteLine(copyError.Message);
-    //    }
-    //}
+    public void CopyImportedFile(string currentFilePath, string copyDirectoryPath, string fileName)
+    {
+        try
+        {
+            // Will not overwrite if the destination file already exists.
+            File.Copy(currentFilePath, Path.Combine(copyDirectoryPath, fileName ));
+        }
+    
+        // Catch exception if the file was already copied.
+        catch (IOException copyError)
+        {
+            Console.WriteLine(copyError.Message);
+        }
+    }
 }

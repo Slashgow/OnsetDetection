@@ -8,16 +8,16 @@ using System;
 public class UIMenuSongLoader : MonoBehaviour
 {
     [SerializeField]
-    private GameObject content;
+    protected GameObject content;
 
     [SerializeField]
-    private UISongToggleGroupController toggleGroupController;
+    protected UISongToggleGroupController toggleGroupController;
 
     [SerializeField]
-    private GameObject UISongGroupPrefab;
+    protected GameObject UISongGroupPrefab;
 
     [SerializeField]
-    private AudioSource audioSource;
+    protected AudioSource audioSource;
 
     [SerializeField]
     private Button startButton;
@@ -25,7 +25,7 @@ public class UIMenuSongLoader : MonoBehaviour
     private List<string> fileNames =new List<string>();
     private List<AudioClipData> audioClipDatas = new List<AudioClipData>();
 
-    private void Start()
+    protected virtual void Start()
     {
         audioSource.ignoreListenerPause = true;
         SetAllAudioClipData();
@@ -34,7 +34,7 @@ public class UIMenuSongLoader : MonoBehaviour
         startButton.onClick.AddListener(LoadScene);
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         startButton.onClick.RemoveListener(LoadScene);
     }
@@ -73,7 +73,7 @@ public class UIMenuSongLoader : MonoBehaviour
         }
     }
 
-    public void LoadUI()
+    public virtual void LoadUI()
     {
         Utility.DestroyAllChidren(content.transform);
 
@@ -93,7 +93,7 @@ public class UIMenuSongLoader : MonoBehaviour
         toggleGroupController.RegisterValueChanged();
     }
 
-    private void UiSong_OnIsSelected(AudioClipData audioClipData)
+    protected void UiSong_OnIsSelected(AudioClipData audioClipData)
     {
         startButton.interactable = true;
         GameManager.Instance.CurrentAudioClipData = audioClipData;

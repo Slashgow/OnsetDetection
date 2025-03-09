@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 [Serializable]
@@ -26,7 +25,7 @@ public class SongSpawnDataByDifficulty
     private float minTimeAbsoluteBetweenNoteToChangeTrack;
     public float MinTimeAbsoluteBetweenNoteToChangeTrack => minTimeAbsoluteBetweenNoteToChangeTrack;
 
-    [SerializeField, Range(0f, 10f)]
+    [SerializeField, Range(0f, 20f)]
     private float noteSpeed;
     public float NoteSpeed => noteSpeed;
 }

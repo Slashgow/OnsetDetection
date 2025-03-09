@@ -65,6 +65,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         {
             scoreData.HighScore = scoreData.Score;
             SaveDataPaths.SetHighScore(GameManager.Instance.CurrentAudioClipData, scoreData.HighScore);
+            GameManager.Instance.UpdateTotalScore();
         }
         else
         {
