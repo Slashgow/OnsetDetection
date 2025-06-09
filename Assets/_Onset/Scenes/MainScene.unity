@@ -693,19 +693,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024062663005275834, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4024062663005275834, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.8333333
       objectReference: {fileID: 0}
     - target: {fileID: 4286548097189102200, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -1520
       objectReference: {fileID: 0}
     - target: {fileID: 4286548097189102200, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -680
       objectReference: {fileID: 0}
     - target: {fileID: 4366632641967389338, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -986,6 +986,18 @@ PrefabInstance:
     - target: {fileID: 6440861847529524465, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6625857284986606539, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6625857284986606539, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6625857284986606539, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 6657392593773176224, guid: 88190263cf34c5f4c9225c14aeb5b05e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3797,7 +3809,7 @@ MonoBehaviour:
       timeBetweenNotesToChangeTrack: 0.65
       maximumTimeOnTrack: 5
       minTimeAbsoluteBetweenNoteToChangeTrack: 0.2
-      noteSpeed: 17
+      noteSpeed: 10
     notePool: {fileID: 759236551}
 --- !u!4 &773092504
 Transform:
@@ -5348,7 +5360,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 133d2f6a4ccf7674bb0ba060f7e7dc43, type: 2}
+  - {fileID: 2100000, guid: 1ef7d07216380634583947f17c3476ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
